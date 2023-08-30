@@ -38,4 +38,10 @@
 	SET STATUS = 'N'
 	WHERE USER_ID = #{userId} AND MEMBER_ID = #{memberId}
 </update>
+
+	<select id="getFollowsByUserId" parameterType="string" resultMap="followResultSet">
+        SELECT USER_ID, MEMBER_ID, STATUS
+        FROM FOLLOW
+        WHERE USER_ID = #{userId}
+    </select>
 </mapper>
