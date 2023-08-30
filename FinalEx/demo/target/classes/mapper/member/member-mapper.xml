@@ -30,5 +30,16 @@
 	WHERE USER_ID LIKE '%'|| #{query}|| '%' AND STATUS ='Y'
 </select>
 
+<select id ="checkId" parameterType="string" resultType="int">
+	SELECT COUNT(*)
+	FROM MEMBER
+	WHERE USER_ID = #{userId}
+</select>
+
+<select id ="checkName" parameterType="string" resultType="int">
+	SELECT COUNT(*)
+	FROM MEMBER
+	WHERE USER_NAME = #{userName}
+</select>
 
 </mapper>
