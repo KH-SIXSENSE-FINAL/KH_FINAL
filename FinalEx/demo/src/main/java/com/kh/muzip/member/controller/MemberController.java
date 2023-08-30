@@ -105,13 +105,6 @@ public class MemberController {
             return ResponseEntity.badRequest().body(Map.of("message", "친구 해제에 실패했습니다."));
         }
     }
-    
-    
-    
-    
-    
-    
-    
 }
 
 
