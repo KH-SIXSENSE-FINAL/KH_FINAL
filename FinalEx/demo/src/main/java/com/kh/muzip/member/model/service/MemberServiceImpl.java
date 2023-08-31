@@ -44,4 +44,14 @@ public class MemberServiceImpl implements MemberService{
 	public int unFollow(String userId, String memberId) {
 		return memberDao.unFollow(userId,memberId);
 	}
+	
+	@Override
+	public boolean checkId(String userId) {
+		return memberDao.checkId(userId);
+	}
+	
+	@Override
+	public boolean checkName(String userName) {
+		return memberDao.checkName(userName);
+	}
 }

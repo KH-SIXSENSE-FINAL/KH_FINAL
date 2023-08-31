@@ -75,6 +75,26 @@ public class MemberController {
         return ResponseEntity.ok(members);
     }
     
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/checkId")
+    public ResponseEntity<Map<String, Boolean>> checkId(@RequestParam("userId") String userId) {
+        Boolean usercheckId = memberService.checkId(userId);
+        Map<String, Boolean> response = new HashMap<>();
+        
+        response.put("IsCheck", usercheckId);
+        return ResponseEntity.ok(response);
+    }
+    
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/checkName")
+    public ResponseEntity<Map<String, Boolean>> checkName(@RequestParam("userName") String userName) {
+        Boolean usercheckName = memberService.checkName(userName);
+        Map<String, Boolean> response = new HashMap<>();
+        
+        response.put("IsNameCheck", usercheckName);
+        return ResponseEntity.ok(response);
+    }
+    
     @GetMapping("/checkFollow")
     public ResponseEntity<Map<String, Boolean>> checkFollow(@RequestParam("userId") String userId, @RequestParam("memberId") String memberId) {
     	boolean isFriendValue = memberService.checkFollow(userId, memberId); // 친구 여부 확인 함수 호출
