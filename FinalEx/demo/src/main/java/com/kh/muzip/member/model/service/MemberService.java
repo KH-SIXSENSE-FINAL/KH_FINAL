@@ -13,4 +13,6 @@ public interface MemberService {
 	boolean checkFollow(String userId, String memberId);
 	int addFollow(String userId, String memberId);
 	int unFollow(String userId, String memberId);
+	boolean checkId(String userId);
+	boolean checkName(String userName);
 }
