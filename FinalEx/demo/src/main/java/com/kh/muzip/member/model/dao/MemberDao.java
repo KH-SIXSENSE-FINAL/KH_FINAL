@@ -29,17 +29,24 @@ public class MemberDao {
 	}
 	
 	public boolean checkFollow(String userId, String memberId) {
+		boolean result;
 		Map<String, String> paramMap = new HashMap<>();
 	    paramMap.put("userId", userId);
 	    paramMap.put("memberId", memberId);
 	    
-		int result =  session.selectOne("follow.checkFollow",paramMap);
-		if(result >0) {
-			return true;
-		}else {
-			return false;
-		}
-		
+	    int checkCount = session.selectOne("follow.checkFollowCount",paramMap);
+	    if(checkCount == 0) {
+	    	session.insert("follow.insertFollow",paramMap);
+	    	result = false;
+	    }else {
+	    	int checkFollow = session.selectOne("follow.checkFollow",paramMap);
+	    	if(checkFollow > 0) {
+	    		result = true;
+	    	}else {
+	    		result = false;
+	    	}
+	    }
+	    return result;
 	}
 	
 	public int addFollow(String userId, String memberId) {
@@ -56,5 +63,23 @@ public class MemberDao {
 	    paramMap.put("memberId", memberId);
 	    
 		return session.update("follow.unFollow",paramMap);
+	}
+	
+	public boolean checkId(String userId) { 
+		int checkId = session.selectOne("member.checkId",userId);
+		if(checkId > 0) {
+			return false;
+		}else {
+			return true;
+		}
+	}
+	
+	public boolean checkName(String userName) { 
+		int checkName = session.selectOne("member.checkName",userName);
+		if(checkName > 0) {
+			return false;
+		}else {
+			return true;
+		}
 	}
 }
