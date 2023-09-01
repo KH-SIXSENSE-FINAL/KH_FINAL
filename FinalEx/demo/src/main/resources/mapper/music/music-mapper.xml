@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.rog//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="music">
+
+	<resultMap id="musicResultSet" type="music">
+		<id column="MUSIC_NO" property="musicNo"/>
+		<result column="MUSIC_TITLE" property="musicTitle"/>
+		<result column="MUSIC_ARTIST" property="musicArtist"/>
+		<result column="MUSIC_LYRICS" property="musicLyrics"/>
+		<result column="GENRE" property="genre"/>
+		<result column="ENROLL_DATE" property="enrollDate"/>
+		<result column="PLAY_COUNT" property="playCount"/>
+		<result column="DAILY_COUNT" property="dailyCount"/>
+		<result column="HOUR_COUNT" property="hourCount"/>
+		<result column="MUSIC_PATH" property="musicPath"/>
+		<result column="COVER_PATH" property="coverPath"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
+	
+	<resultMap id="playlistResultSet" type="playlist">
+		<id column="PLAYLIST_NO" property="playlistNo"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="PLAYLIST_NAME" property="playlistName"/>
+		<result column="STATUS" property="status"/>
+		<collection property="playlistSongs" ofType="music" javaType="java.util.List"
+					select="selectPlaylistSongs" column="PLAYLIST_NO"/>
+	</resultMap>
+	
+
+	<select id="selectPlaylist" parameterType="int" resultMap="playlistResultSet">
+		SELECT *
+		FROM PLAYLIST
+		WHERE USER_NO = #{userNo} AND STATUS='Y'
+	</select>
+	
+	<select id="selectAllSongs" >
+		SELECT MUSIC_NO, MUSIC_TITLE, MUSIC_ARTIST, MUSIC_LYRICS, GENRE, ENROLL_DATE, PLAY_COUNT, DAILY_COUNT, HOUR_COUNT, M.STATUS STATUS, MUSIC_PATH, COVER_PATH
+		FROM MUSIC M
+        JOIN MUSIC_FILE MF USING(MUSIC_NO)
+		WHERE M.STATUS='Y'
+	</select>
+	
+	<select id="selectPlaylistSongs" parameterType="string" resultMap="musicResultSet">
+		SELECT MUSIC_NO, MUSIC_TITLE, MUSIC_ARTIST, MUSIC_LYRICS, GENRE, ENROLL_DATE, PLAY_COUNT, DAILY_COUNT, HOUR_COUNT, M.STATUS STATUS, MUSIC_PATH, COVER_PATH
+		FROM PLAYLIST P
+		LEFT JOIN PLAYLIST_SONGS PS USING(PLAYLIST_NO)
+		JOIN MUSIC M USING(MUSIC_NO)
+        JOIN MUSIC_FILE MF USING(MUSIC_NO)
+		WHERE PLAYLIST_NO = #{playlistNo} AND M.STATUS='Y'
+	</select>
+	
+	<select id="nonGenreRecommendSongs" resultMap="musicResultSet">
+		SELECT *
+		FROM (
+			SELECT ROWNUM RNUM, A.*
+			FROM (
+				SELECT MUSIC_NO, MUSIC_TITLE, MUSIC_ARTIST, MUSIC_LYRICS, GENRE, ENROLL_DATE, PLAY_COUNT, DAILY_COUNT, HOUR_COUNT, M.STATUS STATUS, MUSIC_PATH, COVER_PATH
+				FROM MUSIC M
+		        JOIN MUSIC_FILE MF USING(MUSIC_NO)
+				WHERE M.STATUS='Y'
+				ORDER BY DAILY_COUNT DESC
+			) A
+		)
+		WHERE RNUM &lt;= 10
+	</select>
+	
+	<select id="genreRecommendSongs" parameterType="list" resultMap="musicResultSet">
+		SELECT *
+		FROM (
+			SELECT ROWNUM RNUM, A.*
+			FROM (
+				SELECT MUSIC_NO, MUSIC_TITLE, MUSIC_ARTIST, MUSIC_LYRICS, GENRE, ENROLL_DATE, PLAY_COUNT, DAILY_COUNT, HOUR_COUNT, M.STATUS STATUS, MUSIC_PATH, COVER_PATH
+				FROM MUSIC M
+		        JOIN MUSIC_FILE MF USING(MUSIC_NO)
+				WHERE M.STATUS='Y' AND ( 
+				<foreach collection="list" item="genre" separator=" OR ">				
+					GENRE=#{genre}
+				</foreach>
+				)
+				ORDER BY DAILY_COUNT DESC
+			) A
+		)
+		WHERE RNUM &lt;= 10
+	</select>
+	
+	<select id="hourRecommendSongs" resultMap="musicResultSet">
+		SELECT *
+		FROM (
+			SELECT ROWNUM RNUM, A.*
+			FROM (
+				SELECT MUSIC_NO, MUSIC_TITLE, MUSIC_ARTIST, MUSIC_LYRICS, GENRE, ENROLL_DATE, PLAY_COUNT, DAILY_COUNT, HOUR_COUNT, M.STATUS STATUS, MUSIC_PATH, COVER_PATH
+				FROM MUSIC M
+		        JOIN MUSIC_FILE MF USING(MUSIC_NO)
+				WHERE M.STATUS='Y'
+				ORDER BY HOUR_COUNT DESC
+			) A
+		)
+		WHERE RNUM &lt;= 10
+	</select>
+	
+	<select id="latestRecommendSongs" resultMap="musicResultSet">
+		SELECT *
+		FROM (
+			SELECT ROWNUM RNUM, A.*
+			FROM (
+				SELECT MUSIC_NO, MUSIC_TITLE, MUSIC_ARTIST, MUSIC_LYRICS, GENRE, ENROLL_DATE, PLAY_COUNT, DAILY_COUNT, HOUR_COUNT, M.STATUS STATUS, MUSIC_PATH, COVER_PATH
+				FROM MUSIC M
+		        JOIN MUSIC_FILE MF USING(MUSIC_NO)
+				WHERE M.STATUS='Y'
+				ORDER BY ENROLL_DATE DESC
+			) A
+		)
+		WHERE RNUM &lt;= 10
+	</select>
+
+</mapper>
