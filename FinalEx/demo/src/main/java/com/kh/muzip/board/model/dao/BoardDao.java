@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.muzip.board.model.vo.Attachment;
 import com.kh.muzip.board.model.vo.Board;
+import com.kh.muzip.board.model.vo.BoardExt;
 
 @Repository
 public class BoardDao {
@@ -31,6 +32,10 @@ public class BoardDao {
 
 	public int insertAttachmentList(List<Attachment> atList) {
 		return sqlSession.insert("board.insertAttachmentList",atList);
+	}
+
+	public List<BoardExt> selectBoardList() {
+		return sqlSession.selectList("board.selectBoardList");
 	}
 
 }
