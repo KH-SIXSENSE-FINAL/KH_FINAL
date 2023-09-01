@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="board">
+  
+  	
+  	
+  	<resultMap type="board" id="boardResultSet">
+		<id column="BOARD_NO" property="boardNo"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="BOARD_CONTENT" property="boardContent"/>
+		<result column="CREATE_DATE" property="createDate"/>
+		<result column="SECRET" property="secret"/>
+		<result column="STATUS" property="status"/>
+		<result column="MUSIC_NO" property="musicNo"/>
+	</resultMap>
+  
+  
+  
+  	<insert id="insertBoard" parameterType="board" useGeneratedKeys="true">
+  		<selectKey keyProperty="boardNo" resultType="string" order="BEFORE">
+			SELECT SEQ_BOARD_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO BOARD
+		 VALUES(
+			#{boardNo},
+			#{userNo},
+			#{boardContent},
+			SYSDATE,
+			#{secret},
+			DEFAULT,
+			99
+		)
+  	</insert>
+  	
+  	
+  	<insert id="insertAttachmentList" parameterType="list">
+	 	INSERT INTO ATTACHMENT(FILE_NO, USER_NO, BOARD_NO, ORIGIN_NAME ,CHANGE_NAME,FILE_PATH ,UPLOAD_DATE, FILE_LEVEL, STATUS)
+	 	SELECT SEQ_FILE_NO.NEXTVAL AS FILE_NO, C.* FROM
+	 	(
+	 		<foreach collection="list" item="attach" separator="UNION ALL">
+	 			SELECT
+	 				#{attach.userNo} as USER_NO,
+	 				#{attach.boardNo} as BOARD_NO,
+	 				#{attach.originName} as ORIGIN_NAME,
+	 				#{attach.changeName} as CHANGE_NAME,
+	 				#{attach.filePath} as FILE_PATH,
+	 				SYSDATE as UPLOAD_DATE,
+	 				#{attach.fileLevel} as FILE_LEVEL,
+	 				'Y' as STATUS
+	 			FROM DUAL
+	 		</foreach>	
+	 	) C
+	 </insert>
+  	
+  
+  
+</mapper>

@@ -35,3 +35,8 @@ replay_pid*
 *.project
 *.classpath
 *.MF
+*.mp3
+*.jpg
+*.png
+*.gif
+*.gitignore
