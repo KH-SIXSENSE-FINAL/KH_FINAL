@@ -7,8 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BoardDao {
 	
-	
-	@Autowired
-	private SqlSession sqlSession;
-	
 }
