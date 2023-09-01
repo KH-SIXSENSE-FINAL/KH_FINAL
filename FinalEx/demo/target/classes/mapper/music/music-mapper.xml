@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.rog//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="music">
+<mapper namespace="musicMapper">
 
 	<resultMap id="musicResultSet" type="music">
 		<id column="MUSIC_NO" property="musicNo"/>
@@ -112,5 +112,48 @@
 		)
 		WHERE RNUM &lt;= 10
 	</select>
+	
+	<insert id="insertMusic" parameterType="music" useGeneratedKeys="true">
+		<selectKey keyProperty="musicNo" resultType="string" order="BEFORE">
+			SELECT SEQ_MUSIC_NO.NEXTVAL FROM DUAL
+			<!-- 보드번호를 일단 얻어와서 sql문 실행하기 before에 넣어준 뒤 아래 실행 -->
+		</selectKey>
+		INSERT INTO MUSIC
+		(
+			MUSIC_NO,
+			MUSIC_TITLE,
+			MUSIC_ARTIST,
+			MUSIC_LYRICS,
+			GENRE
+		) VALUES (
+			#{musicNo},
+			#{musicTitle},
+			#{musicArtist},
+			#{musicLyrics},
+			#{genre}
+		)
+	</insert>
+	
+	<insert id="insertMusicFile" parameterType="musicFile">
+		INSERT INTO MUSIC_FILE
+		(
+			MUSIC_NO,
+			MUSIC_ORIGIN_NAME,
+			MUSIC_CHANGE_NAME,
+			MUSIC_PATH,
+			COVER_ORIGIN_NAME,
+			COVER_CHANGE_NAME,
+			COVER_PATH
+		) VALUES (
+			#{musicNo},
+			#{musicOriginName},
+			#{musicChangeName},
+			#{musicPath},
+			#{coverOriginName},
+			#{coverChangeName},
+			#{coverPath}
+		)
+	</insert>
+	
 
 </mapper>
