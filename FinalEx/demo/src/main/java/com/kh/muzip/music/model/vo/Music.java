@@ -15,12 +15,15 @@ public class Music {
 
 	private String musicNo;
 	private String musicTitle;
-	private String musicInfo;
+	private String musicArtist;
 	private String musicLyrics;
+	private String genre;
 	private Date enrollDate;
 	private int playCount;
 	private int dailyCount;
 	private int hourCount;
+	private String musicPath;
+	private String coverPath;
 	private String status;
 	
 }
