@@ -12,6 +12,7 @@ import com.kh.muzip.board.model.vo.Board;
 @Repository
 public class BoardDao {
 	
+
 	
 	@Autowired
 	private SqlSession sqlSession;
@@ -31,5 +32,5 @@ public class BoardDao {
 	public int insertAttachmentList(List<Attachment> atList) {
 		return sqlSession.insert("board.insertAttachmentList",atList);
 	}
-	
+
 }

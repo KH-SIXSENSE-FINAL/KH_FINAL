@@ -17,12 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class BoardServiceImpl implements BoardService{
 		
+
 	@Autowired
 	private BoardDao boardDao;
 	
 	@Transactional(rollbackFor = {Exception.class})
 	@Override
 	public int insertBoard(Board b, List<Attachment> atList, String serverFolderPath, String webPath) throws Exception {
+
 		
 		b.setBoardContent(Utils.XSSHandling(b.getBoardContent()));
 		b.setBoardContent(Utils.newLineHandling(b.getBoardContent()));
