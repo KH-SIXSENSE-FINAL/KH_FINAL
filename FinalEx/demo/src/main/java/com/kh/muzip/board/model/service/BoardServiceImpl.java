@@ -8,10 +8,5 @@ import com.kh.muzip.board.model.dao.BoardDao;
 @Service
 public class BoardServiceImpl implements BoardService{
 		
-	@Autowired
-	private BoardDao boardDao;
-	
-	
-	
 		
 }
