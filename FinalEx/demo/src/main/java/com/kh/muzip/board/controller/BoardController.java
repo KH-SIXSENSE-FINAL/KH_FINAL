@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.muzip.board.model.service.BoardService;
 import com.kh.muzip.board.model.vo.Board;
+import com.kh.muzip.board.model.vo.BoardExt;
 import com.kh.muzip.member.model.vo.Member;
 import com.kh.muzip.board.model.vo.Attachment;
 import com.kh.muzip.common.Utils;
@@ -41,7 +43,7 @@ public class BoardController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/insertBoard")
 	public ResponseEntity<String> insertBoard(
-				@RequestPart("files") List<MultipartFile> files,
+				@RequestParam(value="files" , required=false) List<MultipartFile> files,
 			    @RequestParam("boardContent") String boardContent,
 			    @RequestParam("userNo") String userNo,
 			    @RequestParam("secret") String secret) {
@@ -61,11 +63,10 @@ public class BoardController {
 		if(!dir.exists()) {
 			dir.mkdirs();
 		}
-	
-		List<Attachment> atList = new ArrayList();
 		
+		List<Attachment> atList = new ArrayList();
+		if(files != null) {
 		for(MultipartFile upfile : files) {
-			
 			String changeName = Utils.saveFile(upfile, serverFolderPath);
 			Attachment at = new Attachment();
 			at.setChangeName(changeName);
@@ -74,6 +75,7 @@ public class BoardController {
 			at.setUserNo(userNo);
 			atList.add(at);
 			log.info("파일 {}",at);
+			}
 		}
 		
 		int result = 0;
@@ -91,5 +93,21 @@ public class BoardController {
 		}
 		
 	}
+	
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/selectBoardList")
+	public ResponseEntity<List<BoardExt>> selectBoardList(){
+		
+		
+	List<BoardExt> boardList = boardService.selectBoardList();
+		
+		log.info("보드 {}",boardList.get(0));
+	if(boardList.isEmpty() ) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(boardList); 
+	}else {
+		return ResponseEntity.ok(boardList);
+	}
+}
 	
 }
