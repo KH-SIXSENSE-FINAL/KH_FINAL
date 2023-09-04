@@ -29,4 +29,5 @@ public class SecurityConfig {
         firewall.setAllowUrlEncodedSlash(true); // `//` 문자열 허용
         return firewall;
     }
+
 }

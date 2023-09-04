@@ -28,7 +28,7 @@ public class MusicServiceImpl implements MusicService{
 	}
 
 	@Override
-	public ArrayList<ArrayList<Music>> selectRecommendList(List genreList) {
+	public ArrayList<ArrayList<Music>> selectRecommendList(List<String> genreList) {
 		return musicDao.selectRecommendList(genreList);
 	}
 
@@ -60,6 +60,41 @@ public class MusicServiceImpl implements MusicService{
 		}
 		
 		return result;
+	}
+
+	@Override
+	public int insertPlaylist(String playlistName, String userNo) {
+		return musicDao.insertPlaylist(playlistName, userNo);
+	}
+
+	@Override
+	public int deletePlaylist(String playlistNo) {
+		return musicDao.deletePlaylist(playlistNo);
+	}
+
+	@Override
+	public Music selectOneMusic(String musicNo) {
+		return musicDao.selectOneMusic(musicNo);
+	}
+
+	@Override
+	public int addPlaylistSong(String playlistNo, String musicNo) {
+		return musicDao.addPlaylistSong(playlistNo, musicNo);
+	}
+
+	@Override
+	public int removePlaylistSong(String playlistNo, String musicNo) {
+		return musicDao.removePlaylistSong(playlistNo, musicNo);
+	}
+
+	@Override
+	public int increaseCount(String musicNo) {
+		return musicDao.increaseCount(musicNo);
+	}
+
+	@Override
+	public List<Music> searchMusic(String keyword) {
+		return musicDao.searchMusic(keyword);
 	}
 
 }
