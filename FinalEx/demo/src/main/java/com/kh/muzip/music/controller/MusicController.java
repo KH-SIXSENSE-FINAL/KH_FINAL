@@ -1,14 +1,22 @@
 package com.kh.muzip.music.controller;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,7 +63,6 @@ public class MusicController {
 		ArrayList<ArrayList<Music>> recommendList = musicService.selectRecommendList(genreList);
 		
 		return recommendList;
-		
 	}
 	
 	@Autowired
@@ -114,6 +121,97 @@ public class MusicController {
 		
 		return result;		
 	}
+	
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/insertPlaylist")
+	public int insertPlaylist(
+			@RequestParam("listName") String playlistName,
+			@RequestParam("userNo") String userNo
+			){		
+		return musicService.insertPlaylist(playlistName, userNo);
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/deletePlaylist")
+	public int deletePlaylist(
+			@RequestParam("playlistNo") String playlistNo
+			){		
+		return musicService.deletePlaylist(playlistNo);
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/selectOneMusic")
+	public Music selectOneMusic(
+			@RequestParam("playlistNo") String musicNo
+			){
+		return musicService.selectOneMusic(musicNo);
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/addPlaylistSong")
+	public int addPlaylistSong(
+			@RequestParam("playlistNo") String playlistNo,			
+			@RequestParam("musicNo") String musicNo
+			){
+		return musicService.addPlaylistSong(playlistNo, musicNo);
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/removePlaylistSong")
+	public int removePlaylistSong(
+			@RequestParam("playlistNo") String playlistNo,			
+			@RequestParam("musicNo") String musicNo
+			){
+		return musicService.removePlaylistSong(playlistNo, musicNo);
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/increaseCount")
+	public int increaseCount(
+			@RequestParam("musicNo") String musicNo,
+			HttpServletRequest request, HttpServletResponse response
+			){
+		int result = 0;
+        String uniqueCookieValue = musicNo;
+        String cookieName = "playMusicNo";
+        Cookie[] cookies = request.getCookies();
+
+        // 이전에 설정된 쿠키가 없을 경우 새 쿠키 생성
+        if (cookies == null || Arrays.stream(cookies).noneMatch(cookie -> cookie.getName().equals(cookieName))) {
+        	Cookie Cookie = new Cookie(cookieName, uniqueCookieValue);
+            Cookie.setMaxAge(3600); // 1시간 (초 단위)
+            response.addCookie(Cookie);
+
+            result = musicService.increaseCount(musicNo);
+        }else {
+        	String[] arr = null;
+        	for(Cookie c : cookies) {
+        		if(c.getName().equals(cookieName)) {        			
+        			arr = c.getValue().split("/");
+        			List<String> list = Arrays.asList(arr);
+        			
+        			// 기존 쿠키값에 현재 게시글 번호와 일치하는 값이 없는 경우
+        			if(list.indexOf(musicNo+"") == -1) {
+        				c.setValue(c.getValue()+"/"+musicNo);
+        				response.addCookie(c);
+        				result =musicService.increaseCount(musicNo);
+        			}
+        		}
+        	}
+        }
+
+        return result;
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/searchMusic")
+	public List<Music> searchMusic(
+			@RequestParam("keyword") String keyword
+			){
+		return musicService.searchMusic(keyword);
+	}
+	
 
 
 }
