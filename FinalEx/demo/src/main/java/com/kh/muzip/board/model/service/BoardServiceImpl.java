@@ -55,6 +55,11 @@ public class BoardServiceImpl implements BoardService{
 	public List<BoardExt> selectBoardList() {
 		List<BoardExt> boardList = boardDao.selectBoardList();
 		
+		for(BoardExt b : boardList) {
+			b.setBoardContent(Utils.newLineClear(b.getBoardContent()));
+		}
+		
+		
 		return boardList;
 	}
 }
