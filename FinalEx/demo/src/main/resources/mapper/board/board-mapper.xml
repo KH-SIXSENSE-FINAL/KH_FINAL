@@ -85,6 +85,7 @@
 	 		   MUSIC_NO
 	 	FROM BOARD
 	 	WHERE STATUS = 'Y'
+	 	ORDER BY TO_NUMBER(BOARD_NO) DESC
 	 </select>
   
   

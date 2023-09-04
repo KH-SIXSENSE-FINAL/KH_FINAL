@@ -74,7 +74,6 @@ public class BoardController {
 			at.setFileLevel(fileLevel);
 			at.setUserNo(userNo);
 			atList.add(at);
-			log.info("파일 {}",at);
 			}
 		}
 		
@@ -99,10 +98,9 @@ public class BoardController {
 	@PostMapping("/selectBoardList")
 	public ResponseEntity<List<BoardExt>> selectBoardList(){
 		
-		
 	List<BoardExt> boardList = boardService.selectBoardList();
+
 		
-		log.info("보드 {}",boardList.get(0));
 	if(boardList.isEmpty() ) {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(boardList); 
 	}else {
