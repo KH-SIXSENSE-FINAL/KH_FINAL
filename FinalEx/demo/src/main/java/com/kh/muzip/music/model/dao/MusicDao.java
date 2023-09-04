@@ -1,7 +1,9 @@
 package com.kh.muzip.music.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class MusicDao {
 		return playlist;
 	}
 	
-	public ArrayList<ArrayList<Music>> selectRecommendList(List genreList){
+	public ArrayList<ArrayList<Music>> selectRecommendList(List<String> genreList){
 		ArrayList<Music> genreArrayList = new ArrayList<Music>();
 		if(genreList.size() == 0) {			
 			List<Music> genreRecommendList = session.selectList("musicMapper.nonGenreRecommendSongs");
@@ -76,4 +78,47 @@ public class MusicDao {
 		return session.insert("musicMapper.insertMusicFile", musicFile);
 	}
 
+	public int insertPlaylist(String playlistName, String userNo) {
+		Map<String, String> listMap = new HashMap<>();
+		listMap.put("playlistName", playlistName);
+		listMap.put("userNo", userNo);
+		return session.insert("musicMapper.insertPlaylist", listMap);
+	}
+	
+	public int deletePlaylist(String playlistNo) {
+		session.delete("musicMapper.deleteSongsOfPlaylist", playlistNo);
+		return session.delete("musicMapper.deletePlaylist", playlistNo);
+	}
+	
+	public Music selectOneMusic(String musicNo) {
+		return session.selectOne("musicMapper.selectOneMusic", musicNo);
+	}
+	
+	public int addPlaylistSong(String playlistNo, String musicNo) {
+		Map<String, String> listMap = new HashMap<>();
+		listMap.put("playlistNo", playlistNo);
+		listMap.put("musicNo", musicNo);
+		
+		String playlistSongs = session.selectOne("musicMapper.selectPlaylistOneSongs", listMap);
+		if(musicNo.equals(playlistSongs)) {
+			return 0;
+		}else {			
+			return session.insert("musicMapper.addPlaylistSong", listMap);
+		}
+	}
+	
+	public int removePlaylistSong(String playlistNo, String musicNo) {
+		Map<String, String> listMap = new HashMap<>();
+		listMap.put("playlistNo", playlistNo);
+		listMap.put("musicNo", musicNo);
+		return session.delete("musicMapper.removePlaylistSong", listMap);
+	}
+	
+	public int increaseCount(String musicNo) {
+		return session.update("musicMapper.increaseCount", musicNo);
+	}
+	
+	public List<Music> searchMusic(String keyword){
+		return session.selectList("musicMapper.searchMusic", keyword);
+	}
 }
