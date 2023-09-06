@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kh.muzip.board.model.dao.BoardDao;
 import com.kh.muzip.board.model.vo.Attachment;
 import com.kh.muzip.board.model.vo.Board;
+import com.kh.muzip.board.model.vo.BoardExt;
 import com.kh.muzip.common.Utils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,23 @@ public class BoardServiceImpl implements BoardService{
 			if(result != atList.size()) { // 이미지 삽입 실패시 강제 예외발생
 				throw new Exception("예외발생");
 			}
+		}else {
+			result = boardNo;
 		}
+		
 		return result;
+	}
+	
+	@Transactional(rollbackFor = {Exception.class})
+	@Override
+	public List<BoardExt> selectBoardList() {
+		List<BoardExt> boardList = boardDao.selectBoardList();
+		
+		for(BoardExt b : boardList) {
+			b.setBoardContent(Utils.newLineClear(b.getBoardContent()));
+		}
+		
+		
+		return boardList;
 	}
 }

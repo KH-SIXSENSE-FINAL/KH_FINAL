@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="board">
-  
-  	
   	
   	<resultMap type="board" id="boardResultSet">
 		<id column="BOARD_NO" property="boardNo"/>
@@ -13,6 +11,82 @@
 		<result column="STATUS" property="status"/>
 		<result column="MUSIC_NO" property="musicNo"/>
 	</resultMap>
+	
+	 <resultMap type="reply" id="replyResultSet">
+	 	<id column="REPLY_NO" property="replyNo"/>
+	 	<result column="USER_NO" property="userNo"/>
+	 	<result column="REF_BNO" property="refBno"/>
+	 	<result column="REPLY_CONTENT" property="replyContent"/>
+	 	<result column="CREATE_DATE" property="createDate"/>
+	 	<result column="STATUS" property="status"/>
+	 </resultMap>
+	 
+	 <resultMap type="attachment" id="attachmentResultSet">
+	 	<id column="FILE_NO" property="fileNo"/>
+	 		<result column="USER_NO" property="userNo"/>
+	 		<result column="BOARD_NO" property="boardNo"/>
+	 		<result column="ORIGIN_NAME" property="originName"/>
+	 		<result column="CHANGE_NAME" property="changeName"/>
+	 		<result column="FILE_PATH" property="filePath"/>
+	 		<result column="UPLOAD_DATE" property="uploadDate"/>
+	 		<result column="FILE_LEVEL" property="fileLevel"/>
+	 		<result column="STATUS" property="status"/>
+	 </resultMap>
+	 
+
+	 
+	 
+	 <resultMap type="boardExt" id="selectBoardListResultSet">
+	 	
+	 	<id column="BOARD_NO" property="boardNo"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="BOARD_CONTENT" property="boardContent"/>
+		<result column="CREATE_DATE" property="createDate"/>
+		<result column="SECRET" property="secret"/>
+		<result column="STATUS" property="status"/>
+		<result column="MUSIC_NO" property="musicNo"/>
+	 								<!-- ofType = 마이바티스식 제네릭 타입 -->
+	 	<collection property="attachList" ofType="attachment" javaType="java.util.List"
+	 	select="selectAttachmentList" column="BOARD_NO"/>
+	 	<!-- 
+	 		collection ofType : 제네릭타입,
+	 				 javaType : 자바의 자료형 => java.util.List<Attachment>
+	 				 property : collection결과를 저장할 boardExt타입의 필드명
+	 	 -->
+	 	 <collection property="replyList" ofType="reply" javaType="java.util.List"
+	 	 		select="selectReplyList" column="BOARD_NO"/>
+	 	 <!-- 
+	 	 	selectReplyList의 조회결과를 boardExt VO객체의 replyList필드에 담겠다는 의미.
+	 	 	replyList에 담을때 java.util.List<reply>객체를 생성해서 담을 예정.
+	 	 	selectReplyList를 호출할때 필요한 데이터(boardNo)의 경우 column="BOARD_NO"을 사용해서 현재 조회된
+	 	 	resultMap내부의 BOARD_NO값을 전달해준다.
+	 	  -->
+	 </resultMap>
+	 
+	 <select id="selectReplyList" parameterType="int" resultMap="replyResultSet">
+	 	SELECT *
+	 	FROM REPLY
+	 	WHERE REF_BNO = #{boardNo} 
+	 </select>
+  	
+  	<select id="selectAttachmentList" parameterType="int" resultMap="attachmentResultSet">
+	 	SELECT *
+	 	FROM ATTACHMENT
+	 	WHERE BOARD_NO = #{boardNo} 
+	 </select>
+	 
+	 <select id="selectBoardList" resultMap="selectBoardListResultSet">
+	 	SELECT BOARD_NO,
+	 		   USER_NO,
+	 		   BOARD_CONTENT,
+	 		   CREATE_DATE,
+	 		   SECRET,
+	 		   STATUS,
+	 		   MUSIC_NO
+	 	FROM BOARD
+	 	WHERE STATUS = 'Y'
+	 	ORDER BY TO_NUMBER(BOARD_NO) DESC
+	 </select>
   
   
   
