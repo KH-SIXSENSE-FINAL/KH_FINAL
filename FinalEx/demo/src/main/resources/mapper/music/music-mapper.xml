@@ -128,6 +128,16 @@
 		    ORDER BY PLAY_COUNT DESC
 		)
 	</select>
+	<insert id="insertKeyword" parameterType="string">
+		INSERT INTO SEARCH
+		(
+			KEYWORD,
+			SEARCH_DATE
+		) VALUES (
+			#{keyword},
+			SYSDATE
+		)
+	</insert>
 	
 	<insert id="insertMusic" parameterType="music" useGeneratedKeys="true">
 		<selectKey keyProperty="musicNo" resultType="string" order="BEFORE">
@@ -170,6 +180,40 @@
 			#{coverPath}
 		)
 	</insert>
+	
+	<select id="selectOneMusicFile" parameterType="string">
+		SELECT *
+		FROM MUSIC_FILE
+		WHERE MUSIC_NO = #{musicNo} AND STATUS='Y'
+	</select>
+	
+	<update id="updateMusic" parameterType="music">
+		UPDATE MUSIC
+		SET	MUSIC_TITLE = #{musicTitle}, MUSIC_ARTIST = #{musicArtist}, MUSIC_LYRICS = #{musicLyrics}, GENRE = #{genre} 
+		WHERE MUSIC_NO = #{musicNo} AND STATUS='Y'
+	</update>
+	
+	<update id="updateMusicFile" parameterType="musicFile">
+		UPDATE MUSIC_FILE
+		SET MUSIC_ORIGIN_NAME = #{musicOriginName},
+			MUSIC_CHANGE_NAME = #{musicChangeName},
+			MUSIC_PATH = #{musicPath},
+			COVER_ORIGIN_NAME = #{coverOriginName},
+			COVER_CHANGE_NAME = #{coverChangeName},
+			COVER_PATH = #{coverPath}
+		WHERE MUSIC_NO = #{musicNo} AND STATUS='Y'
+	</update>
+	
+	<update id="deleteMusic" parameterType="string">
+		UPDATE MUSIC
+		SET STATUS = 'N'
+		WHERE MUSIC_NO = #{musicNo}
+	</update>
+	<update id="deleteMusicFile" parameterType="string">
+		UPDATE MUSIC_FILE
+		SET STATUS = 'N'
+		WHERE MUSIC_NO = #{musicNo}
+	</update>
 	
 	<insert id="insertPlaylist" parameterType="map">
 		INSERT INTO PLAYLIST
@@ -225,8 +269,16 @@
 	
 	<update id="increaseCount" parameterType="string">
 		UPDATE MUSIC
-		SET PLAY_COUNT = PLAY_COUNT+1, DAILY_COUNT = DAILY_COUNT+1,	HOUR_COUNT = HOUR_COUNT+1
+		SET PLAY_COUNT = PLAY_COUNT+1, DAILY_COUNT = DAILY_COUNT+1, HOUR_COUNT = HOUR_COUNT+1
 		WHERE MUSIC_NO = #{musicNo} AND STATUS = 'Y'
+	</update>
+	<update id="resetHourCount">
+		UPDATE MUSIC
+		SET HOUR_COUNT = 0
+	</update>
+	<update id="resetDailyCount">
+		UPDATE MUSIC
+		SET DAILY_COUNT = 0
 	</update>
 
 </mapper>
