@@ -27,5 +27,7 @@ public interface ChatService {
     int joinRoom(ChatRoomJoin join);
 	int insertMsg(ChatMessage message);
 	List<ChatMessage> messageRepo(int chatroomNo);
+	List<ChatRoom> searchChatlist(Map<String, Object> params);
+	List<ChatRoom> Chatlist(String userId);
     
 }
