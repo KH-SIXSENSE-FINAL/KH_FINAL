@@ -1,6 +1,7 @@
 package com.kh.muzip.member.model.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -39,6 +40,15 @@ public class MyProfileDao {
 	    paramMap.put("userNo", userNo);
 	    paramMap.put("fileLevel", fileLevel);
 	    return session.update("myprofile.deactivateImage", paramMap);
+	}
+
+	public Member getMemberByUserNo(int userNoInt) {
+		 return session.selectOne("myprofile.getMemberByUserNo", userNoInt);
+	}
+
+
+	public List<Attachment> getAttachmentsByUserNo(String userNo) {
+		return session.selectList("myprofile.getAttachmentsByUserNo", userNo);
 	}
 
 	
