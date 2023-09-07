@@ -122,9 +122,9 @@
 		    FROM MUSIC M
 		    JOIN MUSIC_FILE MF USING(MUSIC_NO) 
 		    WHERE M.STATUS='Y' 
-		    	  AND (UPPER(M.MUSIC_TITLE) LIKE UPPER('%' || #{keyword} || '%')
-		    	  	   OR UPPER(M.MUSIC_ARTIST) LIKE UPPER('%' || #{keyword} || '%')
-		    	  	   OR UPPER(M.GENRE) LIKE UPPER('%' || #{keyword} || '%'))
+		    	  AND (UPPER(REPLACE(M.MUSIC_TITLE, ' ', '')) LIKE UPPER('%' || REPLACE(#{keyword}, ' ', '') || '%')
+		    	  	   OR UPPER(REPLACE(M.MUSIC_ARTIST, ' ', '')) LIKE UPPER('%' || REPLACE(#{keyword}, ' ', '') || '%')
+		    	  	   OR UPPER(REPLACE(M.GENRE, ' ', '')) LIKE UPPER('%' || REPLACE(#{keyword}, ' ', '') || '%'))
 		    ORDER BY PLAY_COUNT DESC
 		)
 	</select>
@@ -281,10 +281,14 @@
 		SET DAILY_COUNT = 0
 	</update>
 	
-	<!-- SELECT KEYWORD, COUNT(*)
-FROM SEARCH
-WHERE SEARCH_DATE > SYSDATE-1/24
-GROUP BY KEYWORD
-ORDER BY COUNT(*) DESC; -->
+	<select id="selectRanking" resultType="string">
+		<![CDATA[
+		SELECT KEYWORD, COUNT(*)
+		FROM SEARCH
+		WHERE SEARCH_DATE > SYSDATE-1/24
+		GROUP BY KEYWORD
+		ORDER BY COUNT(*) DESC
+		]]>
+	</select>
 
 </mapper>
