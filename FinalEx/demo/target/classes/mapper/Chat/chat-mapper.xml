@@ -1,4 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="chat">
+<resultMap id = "chatRoomResultSet" type="chatRoom">
+	<id column = "CHATROOM_NO" property="chatroomNo"/>
+	<result column ="USER_NO" property="userId"/>
+	<result column = "CHATROOM_NAME" property="chatroomName"/>
+	<result column = "STATUS" property="status"/>
+</resultMap>
+
+<resultMap id="chatMessageResultSet" type="chatMessage">
+	<id column = "MSG_NO" property="msgNo" />
+	<result column = "CHATROOM_NO"  property="chatroomNo"/>
+	<result column = "USER_NO" property="senderName"/>
+	<result column = "MESSAGE" property="message"/>
+	<result column ="CREATE_DATE" property="createDate"/>
+</resultMap>
+
+<insert id = "createChatRoom" parameterType="chatRoom" useGeneratedKeys = "true">
+	INSERT INTO CHAT
+	VALUES(
+		SEQ_CHATROOM_NO.NEXTVAL,#{userId},#{chatroomName},'Y'
+	)
+	<selectKey keyProperty="chatroomNo" resultType="int" order="AFTER">
+		SELECT SEQ_CHATROOM_NO.CURRVAL FROM DUAL
+	</selectKey>
+</insert>
+<insert id="joinChatRoom" parameterType="chatRoom">
+	INSERT INTO CHAT_JOIN
+	VALUES(
+		#{result},#{room.userId}
+	)
+</insert>
+<insert id ="joinRoom">
+	INSERT INTO CHAT_JOIN
+	VALUES(
+		#{chatroomNo},#{userId}
+	)
+</insert>
+<select id="checkRoom" resultType="int">
+	SELECT COUNT(*)
+	FROM CHAT
+	JOIN CHAT_JOIN USING(CHATROOM_NO)
+	WHERE CHAT.USER_NO = #{userId} AND CHAT_JOIN.USER_NO = #{memberId}
+</select>
+<select id ="checkRoomOther" resultType = "int">
+	SELECT COUNT(*)
+	FROM CHAT
+	JOIN CHAT_JOIN USING(CHATROOM_NO)
+	WHERE CHAT.USER_NO = #{memberId} AND CHAT_JOIN.USER_NO = #{userId}
+
+</select>
+<select id="checkedRoom" resultType="int">
+	SELECT CHATROOM_NO
+	FROM CHAT
+	JOIN CHAT_JOIN USING(CHATROOM_NO)
+	WHERE CHAT.USER_NO = #{userId} AND CHAT_JOIN.USER_NO = #{memberId}
+	UNION
+	SELECT CHATROOM_NO
+	FROM CHAT
+	JOIN CHAT_JOIN USING(CHATROOM_NO)
+	WHERE CHAT.USER_NO = #{memberId} AND CHAT_JOIN.USER_NO = #{userId}
+</select>
+<select id="checkjoinRoom" resultType="int">
+	SELECT COUNT(*)
+	FROM CHAT_JOIN
+	WHERE CHATROOM_NO = #{chatroomNo} AND USER_NO = #{userId}
+</select>
+<insert id="insertMsg" parameterType="chatMessage">
+	INSERT INTO CHAT_MSG
+	VALUES(
+		SEQ_MSG_NO.NEXTVAL,#{chatroomNo},#{senderName},#{message},#{createDate}
+	)
+</insert>
+<select id ="messageRepo" parameterType="int" resultMap="chatMessageResultSet">
+	SELECT *
+	FROM CHAT_MSG
+	WHERE CHATROOM_NO = #{chatroomNo}
+	ORDER BY CREATE_DATE ASC
+</select>
 </mapper>

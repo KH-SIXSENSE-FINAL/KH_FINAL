@@ -77,6 +77,25 @@ public class MusicDao {
 	public int insertMusicFile(MusicFile musicFile) {
 		return session.insert("musicMapper.insertMusicFile", musicFile);
 	}
+	
+	public MusicFile selectOneMusicFile(String musicNo) {
+		return session.selectOne("musicMapper.selectOneMusicFile", musicNo);
+	}
+	
+	public int updateMusic(Music m) {
+		return session.update("musicMapper.updateMusic", m);
+	}
+	
+	public int updateMusicFile(MusicFile musicFile) {
+		return session.update("musicMapper.updateMusicFile", musicFile);
+	}
+	
+	public int deleteMusic(String musicNo) {
+		int result = 1;
+		result *= session.update("musicMapper.deleteMusic", musicNo);
+		result *= session.update("musicMapper.deleteMusicFile", musicNo);
+		return result;
+	}
 
 	public int insertPlaylist(String playlistName, String userNo) {
 		Map<String, String> listMap = new HashMap<>();
@@ -117,8 +136,15 @@ public class MusicDao {
 	public int increaseCount(String musicNo) {
 		return session.update("musicMapper.increaseCount", musicNo);
 	}
+	public void resetHourCount() {
+		session.update("musicMapper.resetHourCount");
+	}
+	public void resetDailyCount() {
+		session.update("musicMapper.resetDailyCount");
+	}
 	
 	public List<Music> searchMusic(String keyword){
+		session.insert("musicMapper.insertKeyword", keyword);
 		return session.selectList("musicMapper.searchMusic", keyword);
 	}
 }
