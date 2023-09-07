@@ -65,4 +65,12 @@ public class ChatDao {
 	public List<ChatMessage> messageRepo(int chatroomNo) {
 		return session.selectList("chat.messageRepo",chatroomNo);
 	}
+
+	public List<ChatRoom> searchChatlist(Map<String, Object> params) {
+		return session.selectList("chat.searchChat",params);
+	}
+	
+	public List<ChatRoom> Chatlist(String userId){
+		return session.selectList("chat.Chatlist",userId);
+	}
 }
