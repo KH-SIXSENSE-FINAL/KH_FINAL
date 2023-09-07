@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,10 @@ import com.kh.muzip.music.model.vo.Playlist;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @author user2
+ *
+ */
 @RestController
 @Slf4j
 public class MusicController {
@@ -123,6 +128,82 @@ public class MusicController {
 	}
 	
 	
+	
+	/**
+	 * @param musicNo
+	 * @param cover
+	 * @param music
+	 * @param title
+	 * @param artist
+	 * @param lyrics
+	 * @param genre
+	 * @return
+	 * 나중에 관리자 기능 할때 update 잘 되나 확인!!!
+	 */
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping(value ="/updateMusic", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public int updateMusic(
+			@RequestParam("musicNo") String musicNo,
+			@RequestParam("cover") MultipartFile cover,
+			@RequestParam("music") MultipartFile music,
+			@RequestParam("title") String title, 
+			@RequestParam("artist") String artist,
+			@RequestParam("lyrics") String lyrics,
+			@RequestParam("genre") String genre
+			){
+
+		Music m = new Music();
+		m.setMusicNo(musicNo);
+		m.setMusicTitle(title);
+		m.setMusicArtist(artist);
+		m.setMusicLyrics(lyrics);
+		m.setGenre(genre);
+		
+		String imgaeWebPath="/resources/image/";
+		String mp3WebPath="/resources/mp3/";
+		String imageServerFolderPath = application.getRealPath(imgaeWebPath);
+		String mp3ServerFolderPath = application.getRealPath(mp3WebPath);
+		
+		// 해당 디렉토리가 존재하지 않는다면 생성
+		File dir1 = new File(imageServerFolderPath);
+		File dir2 = new File(mp3ServerFolderPath);
+		if(!dir1.exists()) dir1.mkdirs();
+		if(!dir2.exists()) dir2.mkdirs();
+		
+		MusicFile musicFile = new MusicFile();
+		
+		if(!cover.isEmpty()) {
+			// 파일명 재정의 + 저장
+			String changeName = Utils.saveFile(cover, imageServerFolderPath);
+			musicFile.setCoverChangeName(changeName);
+			musicFile.setCoverOriginName(cover.getOriginalFilename());
+		};
+		if(!music.isEmpty()) {
+			String changeName = Utils.saveFile(music, mp3ServerFolderPath);
+			musicFile.setMusicChangeName(changeName);
+			musicFile.setMusicOriginName(music.getOriginalFilename());
+		}
+			
+		int result = 0;
+		
+		try {
+			result = musicService.updateMusic(m, musicFile,
+					imageServerFolderPath, imgaeWebPath, mp3ServerFolderPath, mp3WebPath);
+		} catch (Exception e) {
+			log.error("error = {}", e.getMessage());
+		}
+		
+		return result;		
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping(value ="/deleteMusic", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public int deleteMusic(@RequestParam("musicNo") String musicNo) {
+		
+		return musicService.deleteMusic(musicNo);
+	}
+	
+	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/insertPlaylist")
 	public int insertPlaylist(
@@ -169,39 +250,20 @@ public class MusicController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/increaseCount")
 	public int increaseCount(
-			@RequestParam("musicNo") String musicNo,
-			HttpServletRequest request, HttpServletResponse response
+			@RequestParam("musicNo") String musicNo
 			){
-		int result = 0;
-        String uniqueCookieValue = musicNo;
-        String cookieName = "playMusicNo";
-        Cookie[] cookies = request.getCookies();
-
-        // 이전에 설정된 쿠키가 없을 경우 새 쿠키 생성
-        if (cookies == null || Arrays.stream(cookies).noneMatch(cookie -> cookie.getName().equals(cookieName))) {
-        	Cookie Cookie = new Cookie(cookieName, uniqueCookieValue);
-            Cookie.setMaxAge(3600); // 1시간 (초 단위)
-            response.addCookie(Cookie);
-
-            result = musicService.increaseCount(musicNo);
-        }else {
-        	String[] arr = null;
-        	for(Cookie c : cookies) {
-        		if(c.getName().equals(cookieName)) {        			
-        			arr = c.getValue().split("/");
-        			List<String> list = Arrays.asList(arr);
-        			
-        			// 기존 쿠키값에 현재 게시글 번호와 일치하는 값이 없는 경우
-        			if(list.indexOf(musicNo+"") == -1) {
-        				c.setValue(c.getValue()+"/"+musicNo);
-        				response.addCookie(c);
-        				result =musicService.increaseCount(musicNo);
-        			}
-        		}
-        	}
-        }
-
-        return result;
+		return musicService.increaseCount(musicNo);
+	}
+	
+	@Scheduled(cron = "0 0 * * * ?") // 매시 정각
+	public void resetHourCount() {
+		musicService.resetHourCount();
+		log.info("1시간 조회수가 초기화 되었습니다.");
+	}
+	@Scheduled(cron = "0 0 0 * * ?") // 매일 자정
+	public void resetDailyCount() {
+		musicService.resetDailyCount();
+		log.info("1일 조회수가 초기화 되었습니다.");
 	}
 	
 	@CrossOrigin(origins = "http://localhost:3000")
