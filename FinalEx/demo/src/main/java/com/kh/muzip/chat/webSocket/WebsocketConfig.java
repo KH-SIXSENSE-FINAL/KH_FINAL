@@ -17,14 +17,14 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
 	
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/chat"); //메시지 전송을 위한 브로커
-        config.setApplicationDestinationPrefixes("/chat"); // 클라이언트로부터 메시지를 받을 엔드포인트 prefix 설정
+        config.enableSimpleBroker("/chat", "/alarm"); //메시지 전송을 위한 브로커
+        config.setApplicationDestinationPrefixes("/chat", "/alarm"); // 클라이언트로부터 메시지를 받을 엔드포인트 prefix 설정
     }
 
 	
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-    	registry.addEndpoint("/ws-chat").withSockJS(); // WebSocket 엔드포인트 등록
+    	registry.addEndpoint("/ws-chat", "/ws-alarm").withSockJS(); // WebSocket 엔드포인트 등록
     }
     
     

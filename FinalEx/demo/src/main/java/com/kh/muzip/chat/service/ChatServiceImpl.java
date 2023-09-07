@@ -36,4 +36,14 @@ public class ChatServiceImpl implements ChatService{
 	public List<ChatMessage> messageRepo(int chatroomNo){
 		return chatDao.messageRepo(chatroomNo);
 	}
+	
+	@Override
+	public List<ChatRoom> searchChatlist(Map<String, Object> params){
+		return chatDao.searchChatlist(params);
+	}
+	
+	@Override
+	public List<ChatRoom> Chatlist(String userId){
+		return chatDao.Chatlist(userId);
+	}
 }

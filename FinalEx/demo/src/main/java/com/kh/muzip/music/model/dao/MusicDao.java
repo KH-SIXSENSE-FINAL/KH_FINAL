@@ -147,4 +147,8 @@ public class MusicDao {
 		session.insert("musicMapper.insertKeyword", keyword);
 		return session.selectList("musicMapper.searchMusic", keyword);
 	}
+	
+	public List<String> selectRanking(){
+		return session.selectList("musicMapper.selectRanking");
+	}
 }
