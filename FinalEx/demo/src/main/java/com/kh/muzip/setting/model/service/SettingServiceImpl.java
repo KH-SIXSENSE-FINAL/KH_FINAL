@@ -62,5 +62,11 @@ public class SettingServiceImpl implements SettingService{
 		return result2;
 		
 	}
+
+	@Override
+	public int withdrawal(int userNo) {
+		
+		return settingDao.withdrawal(userNo);
+	}
 	
 }

@@ -16,4 +16,5 @@ public interface SettingService {
 	int setpassword(int userNo, String changePwd);
 	setting getSetting(int userNo);
 	int changeSetting(int userNo, String cName, String result);
+	int withdrawal(int userNo);
 }

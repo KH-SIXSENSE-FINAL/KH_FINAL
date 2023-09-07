@@ -80,5 +80,10 @@ public class SettingDao {
 		
 	}
 
+	public int withdrawal(int userNo) {
+		
+		return session.update("setting.withdrawal", userNo);
+	}
+
 	
 }
