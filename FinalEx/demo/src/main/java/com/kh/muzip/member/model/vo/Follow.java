@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Follow {
 
-	private String userId;
-	private String memberId;
-	private String status;
+	private String userId;//팔로잉한 유저
+	private String memberId;//팔로우한 유저
+	private String status;//현재 팔로우 상태(Y/N)
 }
