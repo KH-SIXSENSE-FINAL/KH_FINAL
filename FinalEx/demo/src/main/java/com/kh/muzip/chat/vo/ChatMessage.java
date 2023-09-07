@@ -3,6 +3,7 @@ package com.kh.muzip.chat.vo;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,11 +23,14 @@ public class ChatMessage {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column()
+	@Column(name = "MSG_NO")
 	private int msgNo;
-	
+	@Column(name = "CHATROOM_NO")
 	private String chatroomNo;
+	@Column(name = "USER_NO")
 	private String senderName;
+	@Column(name = "MESSAGE")
 	private String message;
+	@Column(name = "CREATE_DATE")
 	private Date createDate;
 }
