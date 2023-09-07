@@ -11,4 +11,6 @@ public class BoardExt extends Board{
 
 	private List<Attachment> attachList;
 	private List<Reply> replyList;
+	private List<LikeBoard> likeList;
+	
 }
