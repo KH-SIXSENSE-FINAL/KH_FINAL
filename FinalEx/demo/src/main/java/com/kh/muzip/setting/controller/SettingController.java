@@ -122,8 +122,48 @@ public class SettingController {
 		}
 	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/withdrawal")
+	public ResponseEntity<?> withdrawal(@RequestBody HashMap<String, Object> m){
+		
+		int userNo = (int)m.get("userNo");
+		String userId = (String)m.get("userId");
+		String memerPwd = (String)m.get("memberPwd");
+		
+		int result = 0;
+		
+		
+		
+		Member loginUser = memberService.loginMember(userId);
+
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		boolean passwordMatches = encoder.matches(memerPwd,loginUser.getUserPwd());
+		
+		if (passwordMatches) {
+			result = settingService.withdrawal(userNo);
+		} else {
+			return ResponseEntity.badRequest().body(Map.of("message", "현재 비밀번호가 일치하지 않습니다."));
+		}
+		
+		if (result > 0) {
+			return ResponseEntity.ok().body(Map.of("message", "회원 탈퇴 되셨습니다."));
+		} else {
+			return ResponseEntity.badRequest().body(Map.of("message", "회원 탈퇴에 실패했습니다."));
+		}
+		
+	}
+	
 	
 	
 	
 	
 }
+
+
+
+
+
+
+
+
+

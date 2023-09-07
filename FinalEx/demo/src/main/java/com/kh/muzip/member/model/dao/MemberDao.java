@@ -17,7 +17,12 @@ public class MemberDao {
 	private SqlSessionTemplate session;
 	
 	public int insertMember(Member member) {
-		return session.insert("member.insertMember",member);
+		int result1 = session.insert("member.insertMember",member);
+		String userId = member.getUserId();
+		Member m = session.selectOne("member.loginMember",userId);
+		int userNo = m.getUserNo();
+		int result2 = session.insert("setting.insertsetting", userNo);
+		return result1*result2>0 ?1:0;
 	}
 	
 	public Member loginMember(String userId) {
