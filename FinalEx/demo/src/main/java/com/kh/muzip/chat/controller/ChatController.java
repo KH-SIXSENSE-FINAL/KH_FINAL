@@ -59,4 +59,25 @@ public class ChatController {
     	return ResponseEntity.ok(messages);
     }
     
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/ChatSearch")
+    public ResponseEntity<List<ChatRoom>> chatList(@RequestParam("query") String search,@RequestParam("userId") String userId){
+    	Map<String, Object> params = new HashMap<>();
+	    params.put("userId", userId); 
+	    params.put("search",search);
+    	
+    	List<ChatRoom> chatroom = service.searchChatlist(params);
+        return ResponseEntity.ok(chatroom);
+    }
+    
+    
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/ChatList")
+    public ResponseEntity<List<ChatRoom>> chatListVo(@RequestParam("userId") String userId){
+    	
+    	List<ChatRoom> chatroom = service.Chatlist(userId);
+        return ResponseEntity.ok(chatroom);
+    }
+    
+    
 }
