@@ -1,6 +1,7 @@
 package com.kh.muzip.member.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,16 +38,12 @@ public class FollowController {
     }
     
     @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/clickFollow") // 클라이언트에서 보낸 POST 요청을 처리하는 엔드포인트
-    public ResponseEntity<String> clickFollow(@RequestBody Follow follow) {
-        try {
-            // 클라이언트에서 받은 userId와 memberId를 기반으로 새로운 팔로우 관계 추가
-            followService.insertFollowStatus(follow);
-
-            return ResponseEntity.ok("팔로우 추가 성공");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("팔로우 추가 실패");
-        }
+    // 팔로워들이 현재 사용자를 팔로우하고 있는지 체크
+    @PostMapping("/checkMultipleFollow")
+    public Map<String, Boolean> checkMultipleFollows(@RequestBody Map<String, Object> request) {
+        String userId = (String) request.get("userId");
+        List<String> followerIds = (List<String>) request.get("followerIds");
+        return followService.checkMultipleFollows(userId, followerIds);
     }
 
     

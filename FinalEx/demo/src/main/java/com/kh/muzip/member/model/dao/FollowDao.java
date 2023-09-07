@@ -15,19 +15,11 @@ public class FollowDao {
     @Autowired
     private SqlSessionTemplate session;
 
-   
-
-	
-
-
+ 
 
 	public List<Follow> getFollowsByUserId(String userId) {
 		return session.selectList("follow.getFollowsByUserId", userId);
 	}
-
-
-
-
 
 
 
@@ -36,12 +28,16 @@ public class FollowDao {
 	}
 
 
-	
-
-
-	public Object insertFollowStatus(Follow follow) {
-		return session.insert("follow.insertFollowStatus", follow);
+	public Follow getFollowByUserIdAndMemberId(String userId, String memberId) {
+	    Map<String, String> params = new HashMap<>();
+	    params.put("userId", userId);
+	    params.put("memberId", memberId);
+	    return session.selectOne("follow.getFollowByUserIdAndMemberId", params);
 	}
+
+
+
+	
 	
 	
 }
