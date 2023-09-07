@@ -1,14 +1,14 @@
-package com.kh.muzip.chat.vo;
+package com.kh.muzip.setting.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatRoomJoin {
-
-	private int chatroomNo;
-	private String userId;
+@Data
+public class Genre {
+	
+	private int userNo;
+	private String genreName;
 }
