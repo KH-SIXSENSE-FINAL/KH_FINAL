@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.muzip.chat.service.ChatService;
 import com.kh.muzip.chat.vo.ChatMessage;
-import com.kh.muzip.chat.vo.ChatMessageRepository;
 import com.kh.muzip.chat.vo.ChatRoom;
 import com.kh.muzip.chat.vo.ChatRoomJoin;
 import com.kh.muzip.member.model.vo.Member;
