@@ -274,6 +274,12 @@ public class MusicController {
 		return musicService.searchMusic(keyword);
 	}
 	
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/selectRanking")
+	public List<String> selectRanking(){
+		return musicService.selectRanking();
+	}
 
 
 }
