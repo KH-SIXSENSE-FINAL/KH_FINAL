@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="setting">
+	<resultMap id="memberResultSet" type="member">
+		<id column="USER_NO" property="userNo" />
+		<result column="USER_ID" property="userId" />
+		<result column="USER_PWD" property="userPwd" />
+		<result column="USER_NAME" property="userName" />
+		<result column="EMAIL" property="email" />
+		<result column="ENROLL_DATE" property="enrollDate" />
+		<result column="USER_INFO" property="userInfo" />
+		<result column="STATUS" property="status" />
+	</resultMap>
+
+
+	<resultMap id="settingResultSet" type="setting">
+		<id column="USER_NO" property="userNo" />
+		<result column="AUTO_PLAY" property="autoPlay" />
+		<result column="THEME" property="theme" />
+		<result column="CHAT_ALARM" property="chatAlarm" />
+		<result column="MUSIC_ALARM" property="musicAlarm" />
+		<result column="COMMENT_ALARM" property="commentAlarm" />
+		<result column="MUSIC_NO" property="musicNo" />
+	</resultMap>
+
+
+
+	<!-- 설정코드 추가- -->
+
+	<select id="getGenre" parameterType="int" resultType="genre">
+		SELECT *
+		FROM GENRE
+		WHERE USER_NO = #{userNo}
+	</select>
+
+	<delete id="deleteGenre" parameterType="int">
+		DELETE FROM GENRE
+		WHERE
+		USER_NO = #{userNo}
+	</delete>
+
+	<insert id="insertGenre" parameterType="map">
+
+		INSERT INTO
+		GENRE(USER_NO, GENRE_NAME)
+		VALUES (#{userNo} , #{genreName})
+
+	</insert>
+
+	<update id="setMemberinfo" parameterType="map">
+		UPDATE MEMBER
+		SET
+		USER_NAME = #{userName},
+		EMAIL = #{email}
+		WHERE USER_NO = #{userNo}
+	</update>
+
+	<update id="setpassword" parameterType="map">
+		UPDATE MEMBER
+		SET USER_PWD
+		= #{changePwd}
+		WHERE USER_NO = #{userNo}
+	</update>
+
+	<select id="getSetting" parameterType="int"
+		resultMap="settingResultSet">
+		SELECT *
+		FROM SETTING
+		WHERE USER_NO = #{userNo}
+	</select>
+	
+	<update id="setautoPlay" parameterType="map">
+		UPDATE SETTING
+		SET AUTO_PLAY = #{result}
+		WHERE USER_NO = #{userNo}
+	</update>
+	<update id="settheme" parameterType="map">
+		UPDATE SETTING
+		SET THEME = #{result}
+		WHERE USER_NO = #{userNo}
+	</update>
+	<update id="setchatAlarm" parameterType="map">
+		UPDATE SETTING
+		SET CHAT_ALARM = #{result}
+		WHERE USER_NO = #{userNo}
+	</update>
+	<update id="setmusicAlarm" parameterType="map">
+		UPDATE SETTING
+		SET MUSIC_ALARM = #{result}
+		WHERE USER_NO = #{userNo}
+	</update>
+	<update id="setcommentAlarm" parameterType="map">
+		UPDATE SETTING
+		SET COMMENT_ALARM = #{result}
+		WHERE USER_NO = #{userNo}
+	</update>
+
+	
+
+</mapper>
