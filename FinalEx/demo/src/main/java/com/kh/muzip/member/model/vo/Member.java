@@ -19,5 +19,6 @@ public class Member {
 	private Date enrollDate;
 	private String userInfo;//내소개
 	private String backMuNo;//배경음악
+	private int membershipNo;
 	private String status;
 }
