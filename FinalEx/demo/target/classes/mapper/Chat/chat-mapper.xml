@@ -78,4 +78,14 @@
 	WHERE CHATROOM_NO = #{chatroomNo}
 	ORDER BY CREATE_DATE ASC
 </select>
+<select id ="searchChat" parameterType="string" resultMap="chatRoomResultSet">
+	SELECT *
+	FROM CHAT
+	WHERE CHATROOM_NAME LIKE '%'|| #{search}|| '%' AND STATUS ='Y' AND USER_NO = #{userId}
+</select>
+<select id="Chatlist" parameterType="String" resultMap="chatRoomResultSet">
+	SELECT *
+	FROM CHAT
+	WHERE USER_NO = #{userId} OR CHATROOM_NAME= #{userId}
+</select>
 </mapper>

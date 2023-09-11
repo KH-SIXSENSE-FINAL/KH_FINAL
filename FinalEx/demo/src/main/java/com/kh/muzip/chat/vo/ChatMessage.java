@@ -34,3 +34,6 @@ public class ChatMessage {
    @Column(name = "CREATE_DATE")
    private Date createDate;
 }
+
+
+
