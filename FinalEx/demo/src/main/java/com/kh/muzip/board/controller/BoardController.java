@@ -47,7 +47,7 @@ public class BoardController {
 			    @RequestParam("userNo") String userNo,
 			    @RequestParam("secret") String secret,
 			    @RequestParam(value="musicNo", required=false) String musicNo) {
-		// 피드 사진파일 레벨 10번
+		// 피드 사진파일 레벨 6~10번
 		int fileLevel = 6;
 		
 		String webPath = "/resources/image/";
@@ -152,5 +152,65 @@ public class BoardController {
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resultR);
 			}
 	}
+	
+	
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/updateBoard")
+	public ResponseEntity<String> updateBoard(
+				@RequestParam(value="files" , required=false) List<MultipartFile> files,
+			    @RequestParam("boardContent") String boardContent,
+			    @RequestParam("userNo") String userNo,
+			    @RequestParam("secret") String secret,
+			    @RequestParam(value="musicNo", required=false) String musicNo,
+			    @RequestParam(value="deleteFileLevel" , required=false) List<Integer> deleteList,
+			    @RequestParam(value="updateFileLevel" , required=false) List<Integer> updateList,
+			    @RequestParam("boardNo") String boardNo) {
+		
+		// 피드 사진파일 레벨 6~10번
+		String webPath = "/resources/image/";
+		String serverFolderPath = application.getRealPath(webPath);	
+		
+		Board b = new Board();
+		b.setBoardContent(boardContent);
+		b.setUserNo(userNo);
+		b.setSecret(secret);
+		b.setMusicNo(musicNo);
+		b.setBoardNo(boardNo);
+		int result = 0;
+		
+		try {
+			result = boardService.updateBoard(b,files,serverFolderPath,webPath,deleteList,updateList);
+			
+		} catch (Exception e) {
+			log.error("error = {}" , e.getMessage());
+		}
+		
+		if(result > 0 ) {
+			return ResponseEntity.ok("게시물 수정 성공하였습니다.");
+		}else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시물 수정 실패하였습니다."); 
+		}
+	}
+	
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/getMyBoard")
+	public ResponseEntity<List<BoardExt>> getMyBoard(@RequestParam("userNo") String userNo){
+		
+		List<BoardExt> myBoardList = boardService.getMyBoard(userNo);
+	
+		if(myBoardList.isEmpty() ) {
+			myBoardList.add(new BoardExt());
+			return ResponseEntity.ok(myBoardList); 
+		}else {
+			return ResponseEntity.ok(myBoardList);
+		}
+	}
+	
+	
+	
+	
+	
 	
 }

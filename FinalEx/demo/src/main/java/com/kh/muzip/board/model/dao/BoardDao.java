@@ -74,6 +74,22 @@ public class BoardDao {
 	public List<Map<String, String>> getAllMusicList() {
 		return sqlSession.selectList("board.getAllMusicList");
 	}
+
+	public int updateBoard(Board b) {
+		return sqlSession.update("board.updateBoard",b);
+	}
+
+	public int deleteAttachment(Map<String, Object> map) {
+		return sqlSession.delete("board.deleteAttachment",map);
+	}
+
+	public int insertAttachment(Attachment at) {
+		return sqlSession.insert("board.insertAttachment",at);
+	}
+
+	public List<BoardExt> getMyBoard(String userNo) {
+		return sqlSession.selectList("board.getMyBoard",userNo);
+	}
 	
 
 }

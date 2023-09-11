@@ -107,7 +107,22 @@
 		INSERT INTO SETTING(USER_NO,AUTO_PLAY,THEME,CHAT_ALARM,MUSIC_ALARM,COMMENT_ALARM)
 		VALUES(#{userNo}, 'Y', 'Y', 'Y', 'Y', 'Y')
 	</insert>
+	
+	<insert id="updateMembership" parameterType="paymentHistory">
+		INSERT INTO PAYMENT_HISTORY VALUES(
+			SEQ_PAYMENT_NO.NEXTVAL,
+			SYSDATE,
+			#{userNo},
+			#{membershipNo}
+		)	
+	
+	</insert>
 
+	<update id="membershipUpdate" parameterType="paymentHistory">
+		UPDATE MEMBER
+		SET MEMBERSHIP_NO = #{membershipNo}
+		WHERE USER_NO = #{userNo}
+	</update>
 	
 
 </mapper>
