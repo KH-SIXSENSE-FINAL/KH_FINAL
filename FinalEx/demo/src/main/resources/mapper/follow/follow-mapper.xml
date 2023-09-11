@@ -49,4 +49,15 @@
         WHERE USER_ID = #{userId} 
         AND MEMBER_ID = #{memberId}
     </select>
+    
+<select id = "chatRoomFriend" parameterType="string" resultMap="followResultSet">
+	SELECT MEMBER_ID
+	FROM FOLLOW
+	WHERE USER_ID = #{userId} AND STATUS = 'Y'
+</select>
+<select id="searchMembers" parameterType="string" resultMap="followResultSet">
+	SELECT MEMBER_ID
+	FROM FOLLOW
+	WHERE USER_ID = #{userId} AND MEMBER_ID LIKE '%'|| #{query}|| '%' AND STATUS ='Y'
+</select>
 </mapper>
