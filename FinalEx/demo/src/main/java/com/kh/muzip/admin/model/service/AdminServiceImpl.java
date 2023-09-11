@@ -19,13 +19,28 @@ public class AdminServiceImpl implements AdminService {
 	private AdminDao adminDao;
 
 	@Override
-	public int selectListCount() {
-		return adminDao.selectListCount();
+	public int selectMemberListCount() {
+		return adminDao.selectMemberListCount();
 	}
 
 	@Override
 	public ArrayList<Member> selectMemberList(PageInfo pi) {
 		return adminDao.selectMemberList(pi);
+	}
+
+	@Override
+	public int updateMemberinfo(Member member) {
+		return adminDao.updateMemberinfo(member);
+	}
+
+	@Override
+	public int WithdrawalMemberinfo(Member member) {
+		return adminDao.WithdrawalMemberinfo(member);
+	}
+
+	@Override
+	public int RestoreMemberinfo(Member member) {
+		return adminDao.RestoreMemberinfo(member);
 	}
 	
 	

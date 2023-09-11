@@ -16,7 +16,7 @@
 	</resultMap>
 
 
-	<select id="selectListCount" resultType="int">
+	<select id="selectMemberListCount" resultType="int">
 		SELECT COUNT(*)
 		FROM MEMBER
 	</select>
@@ -26,6 +26,31 @@
 		FROM MEMBER
 		ORDER BY TO_NUMBER(USER_NO) DESC
 	</select>
+	
+	
+	<update id="updateMemberinfo"  parameterType="member">
+		UPDATE MEMBER
+		SET 
+			USER_ID = #{userId},
+			USER_NAME = #{userName},
+			EMAIL = #{email},
+			MEMBERSHIP_NO = #{membershipNo},
+			STATUS = #{status}
+		WHERE USER_NO = #{userNo}
+	</update>
+	
+	<update id="WithdrawalMemberinfo"  parameterType="member">
+		UPDATE MEMBER
+		SET STATUS = 'N'
+		WHERE USER_NO = #{userNo}
+	</update>
+	
+	
+	<update id="RestoreMemberinfo"  parameterType="member">
+		UPDATE MEMBER
+		SET STATUS = 'Y'
+		WHERE USER_NO = #{userNo}
+	</update>
 
 
 

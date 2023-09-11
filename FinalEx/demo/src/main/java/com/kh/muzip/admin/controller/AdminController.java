@@ -3,8 +3,10 @@ package com.kh.muzip.admin.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,13 +28,13 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
-	
+
 	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping("/selectListCount")
-	public ResponseEntity<?> selectListCount(@RequestBody HashMap<String, Object> m){
-		
-		int listCount = adminService.selectListCount();
-		
+	@PostMapping("/selectMemberListCount")
+	public ResponseEntity<?> selectMemberListCount(@RequestBody HashMap<String, Object> m) {
+
+		int listCount = adminService.selectMemberListCount();
+
 		return ResponseEntity.ok().body(listCount);
 	}
 
@@ -42,7 +44,7 @@ public class AdminController {
 
 		// --------------------페이징 처리------------------------
 
-		int listCount = adminService.selectListCount();
+		int listCount = adminService.selectMemberListCount();
 		int currentPage = m.get("currentPage") != null ? (int) m.get("currentPage") : 1;
 		int pageLimit = 10; // 페이지 하단에 보여질 페이징바의 페이지 최대 갯수
 		int boardLimit = 10; // 한 페이지에 보여질 게시글의 최대 갯수
@@ -56,6 +58,49 @@ public class AdminController {
 
 //		return ResponseEntity.ok().body(map);
 		return ResponseEntity.ok().body(list);
+	}
+
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/updateMemberinfo")
+	public ResponseEntity<?> updateMemberinfo(@RequestBody Member member) {
+
+		int result = adminService.updateMemberinfo(member);
+
+		if (result > 0) {
+			return ResponseEntity.ok().body(Map.of("message", "정보가 수정되었습니다."));
+		} else {
+			return ResponseEntity.badRequest().body(Map.of("message", "정보 수정에 실패했습니다."));
+		}
+
+	}
+
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/WithdrawalMemberinfo")
+	public ResponseEntity<?> WithdrawalMemberinfo(@RequestBody Member member) {
+
+		int result = adminService.WithdrawalMemberinfo(member);
+
+		if (result > 0) {
+			return ResponseEntity.ok().body(Map.of("message", "정보가 수정되었습니다."));
+		} else {
+			return ResponseEntity.badRequest().body(Map.of("message", "정보 수정에 실패했습니다."));
+		}
+
+	}
+	
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/RestoreMemberinfo")
+	public ResponseEntity<?> RestoreMemberinfo(@RequestBody Member member) {
+		
+		int result = adminService.RestoreMemberinfo(member);
+		
+		if (result > 0) {
+			return ResponseEntity.ok().body(Map.of("message", "정보가 수정되었습니다."));
+		} else {
+			return ResponseEntity.badRequest().body(Map.of("message", "정보 수정에 실패했습니다."));
+		}
+		
 	}
 
 }

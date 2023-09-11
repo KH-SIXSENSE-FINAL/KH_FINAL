@@ -7,8 +7,14 @@ import com.kh.muzip.member.model.vo.Member;
 
 public interface AdminService {
 
-	int selectListCount();
+	int selectMemberListCount();
 
 	ArrayList<Member> selectMemberList(PageInfo pi);
+
+	int updateMemberinfo(Member member);
+
+	int WithdrawalMemberinfo(Member member);
+
+	int RestoreMemberinfo(Member member);
 
 }

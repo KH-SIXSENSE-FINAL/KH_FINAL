@@ -21,9 +21,9 @@ public class AdminDao {
 	
 	
 
-	public int selectListCount() {
+	public int selectMemberListCount() {
 		
-		return session.selectOne("admin.selectListCount");
+		return session.selectOne("admin.selectMemberListCount");
 	}
 	
 	
@@ -38,6 +38,26 @@ public class AdminDao {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		
 		return (ArrayList)session.selectList("admin.selectMemberList", null, rowBounds);
+	}
+
+
+
+
+
+	public int updateMemberinfo(Member member) {
+		return session.update("admin.updateMemberinfo",member);
+	}
+
+
+
+	public int WithdrawalMemberinfo(Member member) {
+		return session.update("admin.WithdrawalMemberinfo",member);
+	}
+
+
+
+	public int RestoreMemberinfo(Member member) {
+		return session.update("admin.RestoreMemberinfo",member);
 	} 
 
 }
