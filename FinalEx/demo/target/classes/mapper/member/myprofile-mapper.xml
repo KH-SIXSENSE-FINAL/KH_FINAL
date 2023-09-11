@@ -61,6 +61,9 @@
 	    SELECT * FROM ATTACHMENT WHERE USER_NO = #{userNo} AND STATUS = 'Y'
 	</select>
 	
+	<select id="getUserData" resultMap="memberResultSet">
+	    SELECT * FROM MEMBER WHERE USER_NO = #{userNo}
+	</select>
 	
 	
 	

@@ -19,7 +19,7 @@ public interface MyProfileService {
 
 
 	List<Attachment> getAttachmentsByUserNo(String userNo);
-
-	
+ 
+	Member getUserData(int userNoInt);
 
 }

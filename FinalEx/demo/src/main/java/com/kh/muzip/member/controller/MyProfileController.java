@@ -200,6 +200,31 @@ public class MyProfileController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/getUserData/{userNo}")
+    public ResponseEntity<?> getUserData(@PathVariable("userNo") String userNo) {
+    	if (userNo == null || "undefined".equals(userNo)) {
+    	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid userNo value");
+    	}
+
+        try {
+            // userNo를 int로 변환
+            int userNoInt = Integer.parseInt(userNo);
+            Member userData = myprofileService.getUserData(userNoInt);
+            
+            if (userData != null) {
+                return ResponseEntity.ok(userData);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 사용자 정보가 없습니다.");
+            }
+        } catch (Exception e) {
+            log.error("사용자 정보 가져오기 에러", e);
+            // 여기서 에러의 세부 내용을 클라이언트에게 반환합니다.
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 내부 에러: " + e.getMessage());
+        }
+    }
+
+    
 
 }
 

@@ -46,7 +46,10 @@ public class MyProfileServiceImpl implements MyProfileService{
 		return myprofileDao.getAttachmentsByUserNo(userNo);
 	}
 
-	
+	@Override
+	public Member getUserData(int userNoInt) {
+		return myprofileDao.getUserData(userNoInt);
+	}
 	
 	
 }

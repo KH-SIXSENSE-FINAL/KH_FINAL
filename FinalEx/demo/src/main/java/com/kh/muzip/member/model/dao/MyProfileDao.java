@@ -51,7 +51,10 @@ public class MyProfileDao {
 		return session.selectList("myprofile.getAttachmentsByUserNo", userNo);
 	}
 
-	
+	public Member getUserData(int userNoInt) {
+		
+		return session.selectOne("myprofile.getUserData",userNoInt);
+	}
 	
 	
 }
