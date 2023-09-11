@@ -42,4 +42,9 @@
 	WHERE USER_NAME = #{userName}
 </select>
 
+<select id = "chatRoomMember" parameterType="int" resultMap="memberResultSet">
+	SELECT USER_NAME,USER_ID
+	FROM MEMBER
+	WHERE USER_ID IN (SELECT USER_NO FROM CHAT_JOIN WHERE CHATROOM_NO = #{chatroomNo})
+</select>
 </mapper>

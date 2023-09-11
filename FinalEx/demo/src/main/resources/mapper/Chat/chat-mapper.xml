@@ -86,6 +86,26 @@
 <select id="Chatlist" parameterType="String" resultMap="chatRoomResultSet">
 	SELECT *
 	FROM CHAT
-	WHERE USER_NO = #{userId} OR CHATROOM_NAME= #{userId}
+	WHERE CHATROOM_NO IN (SELECT CHATROOM_NO FROM CHAT_JOIN WHERE USER_NO = #{userId})
 </select>
+
+<insert id = "createGroupChatRoom" parameterType="chatRoom" useGeneratedKeys = "true">
+	INSERT INTO CHAT
+	VALUES(
+		SEQ_CHATROOM_NO.NEXTVAL,#{userId},#{chatroomName},'Y'
+	)
+	<selectKey keyProperty="chatroomNo" resultType="int" order="AFTER">
+		SELECT SEQ_CHATROOM_NO.CURRVAL FROM DUAL
+	</selectKey>
+</insert>
+<insert id ="joinGroupMember">
+	INSERT INTO CHAT_JOIN
+	VALUES(
+		#{chatroomNo},#{memberId}
+	)
+</insert>
+<delete id="exitChatroom">
+	DELETE FROM CHAT_JOIN
+	WHERE CHATROOM_NO = #{chatroomNo} AND USER_NO = #{userId}
+</delete>
 </mapper>
