@@ -54,4 +54,6 @@ public class MemberServiceImpl implements MemberService{
 	public boolean checkName(String userName) {
 		return memberDao.checkName(userName);
 	}
+
+	
 }

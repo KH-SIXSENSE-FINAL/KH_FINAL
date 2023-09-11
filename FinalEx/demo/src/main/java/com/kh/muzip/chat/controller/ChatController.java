@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.muzip.chat.service.ChatService;
 import com.kh.muzip.chat.vo.ChatMessage;
-import com.kh.muzip.chat.vo.ChatMessageRepository;
 import com.kh.muzip.chat.vo.ChatRoom;
 import com.kh.muzip.chat.vo.ChatRoomJoin;
 import com.kh.muzip.member.model.vo.Member;
@@ -58,5 +57,26 @@ public class ChatController {
     	
     	return ResponseEntity.ok(messages);
     }
+    
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/ChatSearch")
+    public ResponseEntity<List<ChatRoom>> chatList(@RequestParam("query") String search,@RequestParam("userId") String userId){
+    	Map<String, Object> params = new HashMap<>();
+	    params.put("userId", userId); 
+	    params.put("search",search);
+    	
+    	List<ChatRoom> chatroom = service.searchChatlist(params);
+        return ResponseEntity.ok(chatroom);
+    }
+    
+    
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/ChatList")
+    public ResponseEntity<List<ChatRoom>> chatListVo(@RequestParam("userId") String userId){
+    	
+    	List<ChatRoom> chatroom = service.Chatlist(userId);
+        return ResponseEntity.ok(chatroom);
+    }
+    
     
 }

@@ -118,7 +118,6 @@ public class BoardController {
 	@GetMapping("/getUserProfileImgList")
 	public ResponseEntity<List<Map<String,String>>> getUserProfileImgList(){
 		List<Map<String,String>> imgList = boardService.getUserProfileImgList();
-		log.info("{}",imgList);
 			return ResponseEntity.ok(imgList);
 	}
 	
@@ -126,7 +125,6 @@ public class BoardController {
 	@GetMapping("/getAllMusicList")
 	public ResponseEntity<List<Map<String,String>>> getAllMusicList(){
 		List<Map<String,String>> allMusicList = boardService.getAllMusicList();
-		log.info("{}",allMusicList);
 			return ResponseEntity.ok(allMusicList);
 	}
 	
@@ -146,9 +144,7 @@ public class BoardController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/insertReply")
 	public ResponseEntity<Reply> insertReply(@RequestBody Reply r ){
-		log.info("리플라이 {}",r);
 		Reply resultR = boardService.insertReply(r);
-		log.info("resultR {}",resultR);
 		
 			if(resultR != null) {
 				return ResponseEntity.ok(resultR);
