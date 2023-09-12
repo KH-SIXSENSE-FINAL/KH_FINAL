@@ -13,6 +13,9 @@ import com.kh.muzip.chat.vo.ChatRoom;
 import com.kh.muzip.chat.vo.ChatRoomJoin;
 import com.kh.muzip.member.model.vo.Member;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class ChatDao {
 
