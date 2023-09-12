@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class Board {
 	private String boardNo;
 	private String userNo;
+	private String userId;
 	private String boardContent;
 	private Date createDate;
 	private String secret;

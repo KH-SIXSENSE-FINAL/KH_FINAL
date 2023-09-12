@@ -208,7 +208,33 @@ public class BoardController {
 		}
 	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/deleteBoard")
+	public ResponseEntity<String> deleteBoard(
+			    @RequestParam("boardNo") String boardNo) {
 	
+		int result = boardService.deleteBoard(boardNo);
+		
+		if(result > 0 ) {
+			return ResponseEntity.ok("게시물이 삭제되었습니다.");
+		}else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시물 삭제 실패하였습니다."); 
+		}
+	}
+	
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/deleteReply")
+	public ResponseEntity<String> deleteReply(
+			@RequestBody Reply r) {
+		log.info("댓글번호{}",r);
+		int result = boardService.deleteReply(r);
+		if(result > 0 ) {
+			return ResponseEntity.ok("댓글이 삭제되었습니다.");
+		}else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 삭제 실패하였습니다."); 
+		}
+	}
 	
 	
 	
