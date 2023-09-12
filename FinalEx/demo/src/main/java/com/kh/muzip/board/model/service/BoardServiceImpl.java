@@ -180,4 +180,16 @@ public class BoardServiceImpl implements BoardService{
 		return myBoardList;
 	}
 	
+	@Transactional(rollbackFor = {Exception.class})
+	@Override
+	public int deleteBoard(String boardNo) {
+		return boardDao.deleteBoard(boardNo);
+	}
+	
+	@Transactional(rollbackFor = {Exception.class})
+	@Override
+	public int deleteReply(Reply r) {
+		return boardDao.deleteReply(r);
+	}
+	
 }

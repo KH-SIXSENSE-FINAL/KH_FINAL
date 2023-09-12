@@ -90,6 +90,20 @@ public class BoardDao {
 	public List<BoardExt> getMyBoard(String userNo) {
 		return sqlSession.selectList("board.getMyBoard",userNo);
 	}
+
+	public int deleteBoard(String boardNo) {
+		int result = sqlSession.delete("board.deleteBoard",boardNo);
+		if(result > 0) {
+			sqlSession.delete("board.deleteBoardAt",boardNo);
+			sqlSession.delete("board.deleteBoardLB",boardNo);
+			sqlSession.delete("board.deleteBoardR",boardNo);
+		}
+		return result;
+		
+	}
+	public int deleteReply(Reply r) {
+		return sqlSession.delete("board.deleteReply",r);
+	}
 	
 
 }

@@ -103,7 +103,7 @@
     </select>
     
 	 <select id="getUserIdList" resultMap="userIdListResult">
-	    SELECT USER_NO AS key, USER_ID AS value
+	    SELECT USER_NO AS key, USER_NAME AS value
 	    FROM MEMBER
 	    WHERE STATUS = 'Y'
 	</select>
@@ -283,5 +283,28 @@
 	 </select>
   	
   	
+  	<delete id="deleteBoard" parameterType="string">
+  		DELETE FROM BOARD
+		WHERE BOARD_NO = #{boardNo}
+  	</delete>
+  	
+  	<delete id="deleteBoardAt" parameterType="string">
+  		DELETE FROM ATTACHMENT
+		WHERE BOARD_NO = #{boardNo}
+  	</delete>
+  	
+  	<delete id="deleteBoardLB" parameterType="string">
+  		DELETE FROM LIKE_BOARD
+		WHERE BOARD_NO = #{boardNo}
+  	</delete>
+  	
+  	<delete id="deleteBoardR" parameterType="string">
+  		DELETE FROM REPLY
+		WHERE REF_BNO = #{boardNo}
+  	</delete>
   
+  	<delete id="deleteReply" parameterType="reply">
+  		DELETE FROM REPLY
+		WHERE REPLY_NO = #{replyNo}
+  	</delete>
 </mapper>
