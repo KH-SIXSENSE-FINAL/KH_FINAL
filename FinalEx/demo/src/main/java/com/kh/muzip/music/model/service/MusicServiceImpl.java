@@ -147,6 +147,11 @@ public class MusicServiceImpl implements MusicService{
 	public void resetDailyCount() {
 		musicDao.resetDailyCount();
 	}
+	
+	@Override
+	public void insertKeyword(String keyword) {
+		musicDao.insertKeyword(keyword);
+	}
 
 	@Override
 	public List<Music> searchMusic(String keyword) {

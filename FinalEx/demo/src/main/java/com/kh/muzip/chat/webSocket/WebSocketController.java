@@ -51,17 +51,30 @@ public class WebSocketController extends TextWebSocketHandler{
 		
 		String alarmNo = "";
 		
-		String userId = alarmService.getUserId(alarm.getSenderNo());
-		
 		if(alarm.getAlarmKind().equals("chat")) {
+			
 			alarm.setAlarmMessage("새로운 채팅 메시지가 있습니다.");
 			alarmNo = alarmService.insertChatAlarm(alarm);
+			
 		}else if(alarm.getAlarmKind().equals("follow")) {
+			
+			String userId = alarm.getSenderNo();
+			String senderUserNo = alarmService.searchUserNo(userId);
+			String receiverUserNo = alarmService.searchUserNo(alarm.getReceiverNo());
+			
+			alarm.setSenderNo(senderUserNo);
+			alarm.setReceiverNo(receiverUserNo);
 			alarm.setAlarmMessage(userId+"님이 당신을 팔로우하였습니다.");
+			
 			alarmNo = alarmService.insertFollowAlarm(alarm);
 		}else if(alarm.getAlarmKind().equals("reply")) {
+			
+			String userId = alarmService.getUserId(alarm.getSenderNo());
+			String receiverNo = alarmService.getReplyReceiverNo(alarm.getAlarmPath());
+			alarm.setReceiverNo(receiverNo);
 			alarm.setAlarmMessage(userId+"님이 게시글에 댓글을 달았습니다.");
 			alarmNo = alarmService.insertReplyAlarm(alarm);
+			
 		}
 		
 		alarm.setAlarmNo(alarmNo+"");
