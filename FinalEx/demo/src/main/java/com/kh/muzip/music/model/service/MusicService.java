@@ -24,6 +24,7 @@ public interface MusicService {
 	int increaseCount(String musicNo);
 	void resetHourCount();
 	void resetDailyCount();
+	void insertKeyword(String keyword);
 	List<Music> searchMusic(String keyword);
 	List<String> selectRanking();
 }
