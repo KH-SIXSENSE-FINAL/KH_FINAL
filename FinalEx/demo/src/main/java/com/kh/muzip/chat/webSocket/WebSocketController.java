@@ -67,7 +67,6 @@ public class WebSocketController extends TextWebSocketHandler{
 			alarm.setAlarmMessage(userId+"님이 당신을 팔로우하였습니다.");
 			
 			alarmNo = alarmService.insertFollowAlarm(alarm);
-			
 		}else if(alarm.getAlarmKind().equals("reply")) {
 			
 			String userId = alarmService.getUserId(alarm.getSenderNo());
