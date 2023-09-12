@@ -27,13 +27,10 @@ public class AlarmDao {
 		if(chatRoomNo.size() != 0) {			
 			list1 = session.selectList("alarmMapper.getChatAlarms", chatRoomNo);
 		}
-		
 		returnList.addAll(list1);
-		
 		List<Alarm> list2 = session.selectList("alarmMapper.getAlarms", userNo) ;
-		
 		returnList.addAll(list2);
-		
+
 		return returnList;
 	}
 	
