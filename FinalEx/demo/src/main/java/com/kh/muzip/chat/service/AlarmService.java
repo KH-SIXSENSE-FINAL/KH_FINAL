@@ -14,4 +14,6 @@ public interface AlarmService {
 	String insertFollowAlarm(Alarm alarm);
 	String insertReplyAlarm(Alarm alarm);
 	void checkAlarm(String alarmNo);
+	String getReplyReceiverNo(String boardNo);
+	String searchUserNo(String userId);
 }

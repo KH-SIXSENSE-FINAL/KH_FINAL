@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.muzip.chat.vo.Alarm;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
 public class AlarmDao {
 	
@@ -56,5 +58,12 @@ public class AlarmDao {
 	public void checkAlarm(String alarmNo) {
 		session.update("alarmMapper.checkAlarm", alarmNo);
 	}
+	
+	public String getReplyReceiverNo(String boardNo) {
+		return session.selectOne("alarmMapper.getReplyReceiverNo", boardNo);
+	}
 
+	public String searchUserNo(String userId) {
+		return session.selectOne("alarmMapper.searchUserNo", userId);
+	}
 }
