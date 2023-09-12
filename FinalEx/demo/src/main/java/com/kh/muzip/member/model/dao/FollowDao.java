@@ -32,7 +32,11 @@ public class FollowDao {
 	    Map<String, String> params = new HashMap<>();
 	    params.put("userId", userId);
 	    params.put("memberId", memberId);
+	   
+	    
 	    return session.selectOne("follow.getFollowByUserIdAndMemberId", params);
+	    
+	    
 	}
 
 
