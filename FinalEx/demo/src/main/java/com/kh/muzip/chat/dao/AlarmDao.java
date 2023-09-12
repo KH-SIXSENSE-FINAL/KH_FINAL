@@ -21,7 +21,10 @@ public class AlarmDao {
 	
 	public List<Alarm> getAlarms(String userNo, List<Integer> chatRoomNo){
 		ArrayList<Alarm> returnList = new ArrayList<Alarm>();
-		List<Alarm> list1 = session.selectList("alarmMapper.getChatAlarms", chatRoomNo);
+		List<Alarm> list1 = new ArrayList<Alarm>();
+		if(chatRoomNo.size() != 0) {			
+			list1 = session.selectList("alarmMapper.getChatAlarms", chatRoomNo);
+		}
 		
 		returnList.addAll(list1);
 		
