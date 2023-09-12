@@ -30,5 +30,9 @@ public interface BoardService {
 			List<Integer> deleteList, List<Integer> updateList);
 
 	public List<BoardExt> getMyBoard(String userNo);
+
+	public int deleteBoard(String boardNo);
+
+	public int deleteReply(Reply r);
 	
 }
