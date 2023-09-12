@@ -2,11 +2,14 @@ package com.kh.muzip.setting.model.service;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.muzip.setting.model.dao.SettingDao;
 import com.kh.muzip.setting.model.vo.Genre;
+import com.kh.muzip.setting.model.vo.PaymentHistory;
 import com.kh.muzip.setting.model.vo.setting;
 
 @Service
@@ -67,6 +70,13 @@ public class SettingServiceImpl implements SettingService{
 	public int withdrawal(int userNo) {
 		
 		return settingDao.withdrawal(userNo);
+	}
+	
+	@Transactional(rollbackFor = {Exception.class})
+	@Override
+	public int updateMembership(PaymentHistory p) {
+		
+		return settingDao.updateMembership(p);
 	}
 	
 }

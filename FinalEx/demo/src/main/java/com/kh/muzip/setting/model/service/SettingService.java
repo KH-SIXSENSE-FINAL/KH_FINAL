@@ -3,6 +3,7 @@ package com.kh.muzip.setting.model.service;
 import java.util.List;
 
 import com.kh.muzip.setting.model.vo.Genre;
+import com.kh.muzip.setting.model.vo.PaymentHistory;
 import com.kh.muzip.setting.model.vo.setting;
 
 
@@ -17,4 +18,5 @@ public interface SettingService {
 	setting getSetting(int userNo);
 	int changeSetting(int userNo, String cName, String result);
 	int withdrawal(int userNo);
+	int updateMembership(PaymentHistory p);
 }

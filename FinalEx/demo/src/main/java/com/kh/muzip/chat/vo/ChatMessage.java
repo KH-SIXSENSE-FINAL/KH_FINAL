@@ -21,16 +21,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChatMessage {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "MSG_NO")
-	private int msgNo;
-	@Column(name = "CHATROOM_NO")
-	private String chatroomNo;
-	@Column(name = "USER_NO")
-	private String senderName;
-	@Column(name = "MESSAGE")
-	private String message;
-	@Column(name = "CREATE_DATE")
-	private Date createDate;
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "MSG_NO")
+   private int msgNo;
+   @Column(name = "CHATROOM_NO")
+   private String chatroomNo;
+   @Column(name = "USER_NO")
+   private String senderName;
+   @Column(name = "MESSAGE")
+   private String message;
+   @Column(name = "CREATE_DATE")
+   private Date createDate;
 }
+
+
+

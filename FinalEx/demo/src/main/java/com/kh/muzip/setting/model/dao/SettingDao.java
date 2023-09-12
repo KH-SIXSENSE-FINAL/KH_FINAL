@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.muzip.setting.model.vo.Genre;
+import com.kh.muzip.setting.model.vo.PaymentHistory;
 import com.kh.muzip.setting.model.vo.setting;
 
 @Repository
@@ -83,6 +84,15 @@ public class SettingDao {
 	public int withdrawal(int userNo) {
 		
 		return session.update("setting.withdrawal", userNo);
+	}
+
+	public int updateMembership(PaymentHistory p) {
+		int result = 0;
+		result =  session.insert("setting.updateMembership", p);
+		if(result > 0) {
+			result =  session.update("setting.membershipUpdate", p);
+		}
+		return result;
 	}
 
 	
