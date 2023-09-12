@@ -181,6 +181,12 @@
 		)
 	</insert>
 	
+	<select id="selectOneMusic" parameterType="string" resultMap="musicResultSet">
+		SELECT MUSIC_NO, MUSIC_TITLE, MUSIC_ARTIST, MUSIC_LYRICS, GENRE, ENROLL_DATE, PLAY_COUNT, DAILY_COUNT, HOUR_COUNT, M.STATUS STATUS, MUSIC_PATH, COVER_PATH
+		FROM MUSIC M
+		JOIN MUSIC_FILE MF USING(MUSIC_NO)
+		WHERE M.STATUS = 'Y' AND MUSIC_NO = #{musicNo}
+	</select>
 	<select id="selectOneMusicFile" parameterType="string">
 		SELECT *
 		FROM MUSIC_FILE
@@ -238,12 +244,6 @@
 		DELETE FROM PLAYLIST_SONGS
 		WHERE PLAYLIST_NO = #{playlistNo}
 	</delete>
-	
-	<select id="selectOneMusic" parameterType="string" resultMap="musicResultSet">
-		SELECT *
-		FROM MUSIC
-		WHERE STATUS = 'Y' AND MUSIC_NO = #{musicNo}
-	</select>
 	
 	<insert id="addPlaylistSong" parameterType="map">
 		INSERT INTO PLAYLIST_SONGS
