@@ -224,7 +224,7 @@ public class MusicController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/selectOneMusic")
 	public Music selectOneMusic(
-			@RequestParam("playlistNo") String musicNo
+			@RequestParam("musicNo") String musicNo
 			){
 		return musicService.selectOneMusic(musicNo);
 	}
@@ -274,6 +274,12 @@ public class MusicController {
 		return musicService.searchMusic(keyword);
 	}
 	
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/selectRanking")
+	public List<String> selectRanking(){
+		return musicService.selectRanking();
+	}
 
 
 }

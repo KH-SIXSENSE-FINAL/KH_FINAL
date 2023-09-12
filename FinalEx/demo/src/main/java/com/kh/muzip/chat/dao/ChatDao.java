@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.muzip.chat.vo.ChatMessage;
 import com.kh.muzip.chat.vo.ChatRoom;
 import com.kh.muzip.chat.vo.ChatRoomJoin;
+import com.kh.muzip.member.model.vo.Member;
 
 @Repository
 public class ChatDao {
@@ -64,5 +65,52 @@ public class ChatDao {
 
 	public List<ChatMessage> messageRepo(int chatroomNo) {
 		return session.selectList("chat.messageRepo",chatroomNo);
+	}
+
+	public List<ChatRoom> searchChatlist(Map<String, Object> params) {
+		return session.selectList("chat.searchChat",params);
+	}
+	
+	public List<ChatRoom> Chatlist(String userId){
+		return session.selectList("chat.Chatlist",userId);
+	}
+
+	public List<Member> chatRoomFriend(String userId) {
+		return session.selectList("follow.chatRoomFriend",userId);
+	}
+
+	public int insertGroupChat(ChatRoom room) {
+		int result = 0;
+		int check = session.insert("chat.createGroupChatRoom",room);
+		if(check == 1) {
+			Map<String, Object> params = new HashMap<>();
+			params.put("chatroomNo", room.getChatroomNo());
+			params.put("memberId", room.getUserId());
+			session.insert("chat.joinGroupMember",params);
+			return result = room.getChatroomNo();
+		}
+		return result; 
+	}
+
+	public Object joinGroupMember(int chatroomNo, List<String> memberIdList) {
+		Map<String, Object> params = new HashMap<>();
+		for(String memberId : memberIdList) {
+			params.put("chatroomNo", chatroomNo);
+			params.put("memberId", memberId);
+			session.insert("chat.joinGroupMember",params);
+		}
+		return null;
+	}
+
+	public List<Member> chatRoomMember(int chatroomNo) {
+		return session.selectList("member.chatRoomMember",chatroomNo);
+	}
+
+	public int exitChatroom(Map<String, Object> params) {
+		return session.delete("chat.exitChatroom",params);
+	}
+
+	public List<Member> searchMembers(Map<String, Object> params) {
+		return session.selectList("follow.searchMembers",params);
 	}
 }

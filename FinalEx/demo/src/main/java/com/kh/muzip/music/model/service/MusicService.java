@@ -25,4 +25,5 @@ public interface MusicService {
 	void resetHourCount();
 	void resetDailyCount();
 	List<Music> searchMusic(String keyword);
+	List<String> selectRanking();
 }
