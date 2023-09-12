@@ -42,6 +42,7 @@ public class WebSocketController extends TextWebSocketHandler{
 		log.info("받아온 메세지는 어디로 갔을까?=={}",message);
 		int result = service.insertMsg(message);
 		
+		
 		return message;
     }
 	
