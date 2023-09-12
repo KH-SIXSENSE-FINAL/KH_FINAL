@@ -49,5 +49,15 @@ public class AlarmServiceImpl implements AlarmService{
 	public void checkAlarm(String alarmNo) {
 		alarmDao.checkAlarm(alarmNo);
 	}
+	
+	@Override
+	public String getReplyReceiverNo(String boardNo) {
+		return alarmDao.getReplyReceiverNo(boardNo);
+	}
+
+	@Override
+	public String searchUserNo(String userId) {
+		return alarmDao.searchUserNo(userId);
+	}
 
 }

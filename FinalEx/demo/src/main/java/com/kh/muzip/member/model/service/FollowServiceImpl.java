@@ -1,5 +1,7 @@
 package com.kh.muzip.member.model.service;
 
+
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +44,7 @@ public class FollowServiceImpl implements FollowService{
 		                resultMap.put(followerId, false);
 		            }
 		        }
-
+		        
 		        return resultMap;
 		    }
 

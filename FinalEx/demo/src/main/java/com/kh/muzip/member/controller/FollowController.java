@@ -38,7 +38,7 @@ public class FollowController {
     }
     
     @CrossOrigin(origins = "http://localhost:3000")
-    // 팔로워들이 현재 사용자를 팔로우하고 있는지 체크
+    // 사용자가 팔로워들을 팔로우하고있는지 체크
     @PostMapping("/checkMultipleFollow")
     public Map<String, Boolean> checkMultipleFollows(@RequestBody Map<String, Object> request) {
         String userId = (String) request.get("userId");
