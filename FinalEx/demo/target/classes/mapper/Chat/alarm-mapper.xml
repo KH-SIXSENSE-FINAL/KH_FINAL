@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="alarmMapper">
+
+<resultMap id="alarmResultSet" type="alarm">
+	<id column="ALARM_NO" property="alarmNo"/>
+	<result column="RECEIVER_NO" property="receiverNo"/>
+	<result column="SENDER_NO" property="senderNo"/>
+	<result column="ALARM_KIND" property="alarmKind"/>
+	<result column="ALARM_PATH" property="alarmPath"/>
+	<result column="ALARM_MESSAGE" property="alarmMessage"/>
+	<result column="CREATE_DATE" property="createDate"/>
+	<result column="CHECK_STATUS" property="checkStatus"/>
+	<result column="STATUS" property="status"/>
+</resultMap>
+
+<select id="getChatRoomNo" parameterType="string" resultType="string">
+	SELECT CHATROOM_NO
+	FROM CHAT_JOIN C
+	JOIN MEMBER M ON M.USER_ID = C.USER_NO
+	WHERE M.USER_NO = #{userNo}
+</select>
+
+<select id="getChatAlarms" parameterType="list" resultMap="alarmResultSet">
+	SELECT *
+	FROM ALARM
+	WHERE 
+	<foreach collection="list" item="chatRoomNo" separator=" OR ">				
+		ALARM_PATH = #{chatRoomNo} AND CHECK_STATUS = 'N' AND STATUS = 'Y'
+	</foreach>
+</select>
+
+<select id="getAlarms" parameterType="string" resultMap="alarmResultSet">
+	SELECT *
+	FROM ALARM
+	WHERE RECEIVER_NO = #{userNo} AND CHECK_STATUS = 'N' AND STATUS = 'Y'
+</select>
+
+<select id="getUserId" parameterType="string" resultType="string">
+	SELECT *
+	FROM MEMBER
+	WHERE USER_NO = #{userNo}
+</select>
+
+<insert id="insertChatAlarm" parameterType="alarm">
+	<selectKey keyProperty="alarmNo" resultType="string" order="BEFORE">
+		SELECT SEQ_ALARM_NO.NEXTVAL FROM DUAL
+	</selectKey>
+	INSERT INTO ALARM
+	(
+		ALARM_NO,
+		SENDER_NO,
+		ALARM_KIND,
+		ALARM_PATH,
+		ALARM_MESSAGE,
+		CREATE_DATE,
+		CHECK_STATUS,
+		STATUS
+	) VALUES (
+		#{alarmNo},
+		#{senderNo},
+		#{alarmKind},
+		#{alarmPath},
+		#{alarmMessage},
+		#{createDate},
+		#{checkStatus},
+		#{status}
+	)
+</insert>
+<insert id="insertFollowAlarm" parameterType="alarm">
+	<selectKey keyProperty="alarmNo" resultType="string" order="BEFORE">
+		SELECT SEQ_ALARM_NO.NEXTVAL FROM DUAL
+	</selectKey>
+	INSERT INTO ALARM
+	(
+		ALARM_NO,
+		RECEIVER_NO,
+		SENDER_NO,
+		ALARM_KIND,
+		ALARM_PATH,
+		ALARM_MESSAGE,
+		CREATE_DATE,
+		CHECK_STATUS,
+		STATUS
+	) VALUES (
+		#{alarmNo},
+		#{receiverNo},
+		#{senderNo},
+		#{alarmKind},
+		#{alarmPath},
+		#{alarmMessage},
+		#{createDate},
+		#{checkStatus},
+		#{status}
+	)
+</insert>
+<insert id="insertReplyAlarm" parameterType="alarm">
+	<selectKey keyProperty="alarmNo" resultType="string" order="BEFORE">
+		SELECT SEQ_ALARM_NO.NEXTVAL FROM DUAL
+	</selectKey>
+	INSERT INTO ALARM
+	(
+		ALARM_NO,
+		RECEIVER_NO,
+		SENDER_NO,
+		ALARM_KIND,
+		ALARM_PATH,
+		ALARM_MESSAGE,
+		CREATE_DATE,
+		CHECK_STATUS,
+		STATUS
+	) VALUES (
+		#{alarmNo},
+		#{receiverNo},
+		#{senderNo},
+		#{alarmKind},
+		#{alarmPath},
+		#{alarmMessage},
+		#{createDate},
+		#{checkStatus},
+		#{status}
+	)
+</insert>
+
+<update id="checkAlarm" parameterType="string">
+	UPDATE ALARM
+	SET CHECK_STATUS = 'Y'
+	WHERE ALARM_NO = #{alarmNo}
+</update>
+
+</mapper>
