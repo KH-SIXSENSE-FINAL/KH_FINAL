@@ -105,7 +105,7 @@
 	
 	<insert id="insertsetting" parameterType="int">
 		INSERT INTO SETTING(USER_NO,AUTO_PLAY,THEME,CHAT_ALARM,MUSIC_ALARM,COMMENT_ALARM)
-		VALUES(#{userNo}, 'Y', 'Y', 'Y', 'Y', 'Y')
+		VALUES(#{userNo}, 'Y', 'N', 'Y', 'Y', 'Y')
 	</insert>
 	
 	<insert id="updateMembership" parameterType="paymentHistory">
