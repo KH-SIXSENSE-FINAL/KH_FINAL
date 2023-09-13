@@ -143,6 +143,10 @@ public class MusicDao {
 		session.update("musicMapper.resetDailyCount");
 	}
 	
+	public void insertKeyword(String keyword) {
+		session.insert("musicMapper.insertKeyword", keyword);
+	}
+	
 	public List<Music> searchMusic(String keyword){
 		session.insert("musicMapper.insertKeyword", keyword);
 		return session.selectList("musicMapper.searchMusic", keyword);

@@ -273,6 +273,13 @@ public class MusicController {
 			){
 		return musicService.searchMusic(keyword);
 	}
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/insertKeyword")
+	public void insertKeyword(
+			@RequestParam("keyword") String keyword
+			){
+		musicService.insertKeyword(keyword);
+	}
 	
 
 

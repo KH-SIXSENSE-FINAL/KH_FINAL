@@ -59,13 +59,15 @@ public class WebSocketController extends TextWebSocketHandler{
 		}else if(alarm.getAlarmKind().equals("follow")) {
 			
 			String userId = alarm.getSenderNo();
-			String userNo = alarmService.searchUserNo(userId);
+			String senderUserNo = alarmService.searchUserNo(userId);
+			String receiverUserNo = alarmService.searchUserNo(alarm.getReceiverNo());
 			
-			alarm.setSenderNo(userNo);
+			alarm.setSenderNo(senderUserNo);
+			alarm.setReceiverNo(receiverUserNo);
 			alarm.setAlarmMessage(userId+"님이 당신을 팔로우하였습니다.");
 			
 			alarmNo = alarmService.insertFollowAlarm(alarm);
-			
+
 		}else if(alarm.getAlarmKind().equals("reply")) {
 			
 			String userId = alarmService.getUserId(alarm.getSenderNo());

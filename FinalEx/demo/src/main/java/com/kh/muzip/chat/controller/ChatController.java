@@ -1,5 +1,6 @@
 package com.kh.muzip.chat.controller;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,13 +34,14 @@ public class ChatController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/checkChatroom")
     public ResponseEntity<Integer> createChatRoom(@RequestParam("userId") String userId,@RequestParam("memberId") String memberId, ChatRoom room,ChatRoomJoin join){
-    	
+    	String n = "";
     	Map<String, Object> params = new HashMap<>();
 	    params.put("userId", userId); 
 	    params.put("memberId",memberId);
-    	
+
     	room.setUserId(userId);
     	room.setChatroomName(memberId);
+    	
     	int chatRoomNo = service.createChatRoom(room,params);
     	log.info("채팅방 번호 == {}",chatRoomNo);
 		
