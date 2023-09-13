@@ -32,7 +32,6 @@ public class MusicServiceImpl implements MusicService{
 	public List<String> getGenre(String userNo){
 		return musicDao.getGenre(userNo);
 	}
-
 	@Override
 	public ArrayList<ArrayList<Music>> selectRecommendList(List<String> genreList) {
 		return musicDao.selectRecommendList(genreList);

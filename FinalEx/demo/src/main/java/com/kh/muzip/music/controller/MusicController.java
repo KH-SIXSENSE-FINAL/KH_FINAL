@@ -62,8 +62,7 @@ public class MusicController {
 	@GetMapping("/getGenre")
 	public List<String> getGenre(
 			@RequestParam("userNo") String userNo
-			){
-		
+			){		
 		List<String> genreList = musicService.getGenre(userNo);
 		
 		return genreList;
@@ -234,7 +233,7 @@ public class MusicController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/selectOneMusic")
 	public Music selectOneMusic(
-			@RequestParam("playlistNo") String musicNo
+			@RequestParam("musicNo") String musicNo
 			){
 		return musicService.selectOneMusic(musicNo);
 	}

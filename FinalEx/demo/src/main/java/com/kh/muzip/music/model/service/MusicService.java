@@ -8,7 +8,6 @@ import com.kh.muzip.music.model.vo.MusicFile;
 import com.kh.muzip.music.model.vo.Playlist;
 
 public interface MusicService {
-	
 	ArrayList<Playlist> selectPlaylist(int userNo);
 	ArrayList<ArrayList<Music>> selectRecommendList(List<String> genreList);
 	List<String> getGenre(String userNo);
