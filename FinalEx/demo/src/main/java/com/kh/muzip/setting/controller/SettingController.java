@@ -166,7 +166,6 @@ public class SettingController {
 		int result = settingService.updateMembership(p);
 
 		if(result > 0) {
-			
 			return ResponseEntity.ok().body(msg);
 		}else {
 			return ResponseEntity.badRequest().body("실패하였습니다.");
