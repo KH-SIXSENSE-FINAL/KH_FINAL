@@ -11,6 +11,7 @@ public interface MusicService {
 	
 	ArrayList<Playlist> selectPlaylist(int userNo);
 	ArrayList<ArrayList<Music>> selectRecommendList(List<String> genreList);
+	List<String> getGenre(String userNo);
 	int insertMusic(Music m, MusicFile musicFile, 
 					String imageServerFolderPath, String imageWebPath, String mp3ServerFolderPath, String mp3WebPath) throws Exception;
 	int updateMusic(Music m, MusicFile musicFile, 
