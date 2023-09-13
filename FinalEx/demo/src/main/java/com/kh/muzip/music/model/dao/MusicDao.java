@@ -31,6 +31,10 @@ public class MusicDao {
 		return playlist;
 	}
 	
+	public List<String> getGenre(String userNo){
+		return session.selectList("musicMapper.getGenre", userNo);
+	}
+	
 	public ArrayList<ArrayList<Music>> selectRecommendList(List<String> genreList){
 		ArrayList<Music> genreArrayList = new ArrayList<Music>();
 		if(genreList.size() == 0) {			
