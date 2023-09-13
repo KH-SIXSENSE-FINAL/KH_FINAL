@@ -1,10 +1,12 @@
 package com.kh.muzip.setting.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,12 +14,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.muzip.admin.model.vo.PageInfo;
+import com.kh.muzip.admin.model.vo.Pagination;
 import com.kh.muzip.member.model.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
 
 import com.kh.muzip.member.model.vo.Member;
 import com.kh.muzip.setting.model.service.SettingService;
+import com.kh.muzip.setting.model.vo.Contact;
 import com.kh.muzip.setting.model.vo.Genre;
 import com.kh.muzip.setting.model.vo.setting;
 
@@ -150,6 +155,66 @@ public class SettingController {
 		} else {
 			return ResponseEntity.badRequest().body(Map.of("message", "회원 탈퇴에 실패했습니다."));
 		}
+		
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/selectContactListCount")
+	public ResponseEntity<?> selectContactListCount(@RequestBody HashMap<String, Object> m){
+		
+		String category = (String)m.get("category");
+		String researchinput = (String)m.get("researchinput");
+		
+		int listCount = settingService.selectContactListCount(category, researchinput);
+
+		return ResponseEntity.ok().body(listCount);
+		
+		
+	}
+	
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/selectContactList")
+	public ResponseEntity<?> selectContactList(@RequestBody HashMap<String, Object> m){
+		
+		String category = (String)m.get("category");
+		String researchinput = (String)m.get("researchinput");
+		
+		int listCount = settingService.selectContactListCount(category, researchinput);
+		int currentPage = m.get("currentPage") != null ? (int) m.get("currentPage") : 1;
+		int pageLimit = 10; // 페이지 하단에 보여질 페이징바의 페이지 최대 갯수
+		int boardLimit = 10; // 한 페이지에 보여질 게시글의 최대 갯수
+
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		ArrayList<Contact> list = settingService.selectContactList(pi,category, researchinput);
+
+		return ResponseEntity.ok().body(list);
+		
+		
+	}
+	
+	
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/insertContact")
+	public ResponseEntity<?> insertContact(@RequestBody HashMap<String, Object> m){
+		int userNo = (int)m.get("userNo");
+		String contactTitle = (String)m.get("contactTitle");
+		String contactCont = (String)m.get("contactCont");
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("userNo", userNo);
+		map.put("contactTitle", contactTitle);
+		map.put("contactCont", contactCont);
+		
+		int result = settingService.insertContact(map);
+
+		if (result > 0) {
+			return ResponseEntity.ok().body(Map.of("message", "문의작성 완료"));
+		} else {
+			return ResponseEntity.badRequest().body(Map.of("message", "작성에 실패했습니다."));
+		}
+		
 		
 	}
 	
