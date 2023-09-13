@@ -127,4 +127,5 @@
 	DELETE FROM CHAT_JOIN
 	WHERE CHATROOM_NO = #{chatroomNo} AND USER_NO = #{userId}
 </delete>
+
 </mapper>

@@ -1,7 +1,5 @@
 package com.kh.muzip.member.model.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,21 +32,6 @@ public class MyProfileServiceImpl implements MyProfileService{
 	
 	public void deactivateImage(String userNo, int fileLevel) {
 		myprofileDao.deactivateImage(userNo, fileLevel);
-	}
-
-	@Override
-	public Member getMemberByUserNo(int userNoInt) {
-		return myprofileDao.getMemberByUserNo(userNoInt);
-	}
-
-	@Override
-	public List<Attachment> getAttachmentsByUserNo(String userNo) {
-		return myprofileDao.getAttachmentsByUserNo(userNo);
-	}
-
-	@Override
-	public Member getUserData(int userNoInt) {
-		return myprofileDao.getUserData(userNoInt);
 	}
 	
 	

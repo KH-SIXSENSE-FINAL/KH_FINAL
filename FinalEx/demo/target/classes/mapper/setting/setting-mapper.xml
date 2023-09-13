@@ -22,6 +22,16 @@
 		<result column="COMMENT_ALARM" property="commentAlarm" />
 		<result column="MUSIC_NO" property="musicNo" />
 	</resultMap>
+	
+	<resultMap id="contactResultSet" type="contact">
+		<id column="CONTACT_NO" property="contactNo" />
+		<result column="USER_NO" property="userNo" />
+		<result column="CONTACT_TITLE" property="contactTitle" />
+		<result column="CONTACT_CONT" property="contactCont" />
+		<result column="CONTACT_DATE" property="contactDate" />
+		<result column="ADMIN_REPLY" property="adminReply" />
+		<result column="STATUS" property="status" />
+	</resultMap>
 
 
 
@@ -105,24 +115,65 @@
 	
 	<insert id="insertsetting" parameterType="int">
 		INSERT INTO SETTING(USER_NO,AUTO_PLAY,THEME,CHAT_ALARM,MUSIC_ALARM,COMMENT_ALARM)
-		VALUES(#{userNo}, 'Y', 'Y', 'Y', 'Y', 'Y')
+		VALUES(#{userNo}, 'Y', 'N', 'Y', 'Y', 'Y')
 	</insert>
+	<!-- 회원탈퇴 끝-->
 	
-	<insert id="updateMembership" parameterType="paymentHistory">
-		INSERT INTO PAYMENT_HISTORY VALUES(
-			SEQ_PAYMENT_NO.NEXTVAL,
-			SYSDATE,
-			#{userNo},
-			#{membershipNo}
-		)	
+	<select id="selectContactListCount" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM CONTACT
+		WHERE STATUS = 'Y'
+		<if test="researchinput != null and researchinput !=''">
+			<choose>
+				<when test="category == 'title'">
+					AND CONTACT_TITLE LIKE '%' || #{researchinput} || '%'
+				</when>
+				<when test="category == 'content'">
+					AND CONTACT_CONT LIKE '%' || #{researchinput} || '%'
+				</when>
+			</choose>
+			</if>
+	</select>
 	
+
+	<select id="selectContactList" parameterType="map" resultType="contact">
+		SELECT *
+		FROM CONTACT
+		WHERE STATUS = 'Y'
+		<if test="researchinput != null and researchinput !=''">
+			<choose>
+				<when test="category == 'title'">
+					AND CONTACT_TITLE LIKE '%' || #{researchinput} || '%'
+				</when>
+				<when test="category == 'content'">
+					AND CONTACT_CONT LIKE '%' || #{researchinput} || '%'
+				</when>
+			</choose>
+			</if>
+		ORDER BY TO_NUMBER(CONTACT_NO) DESC
+	</select>
+	
+	<insert id="insertContact" parameterType="map">
+		INSERT INTO CONTACT
+			(
+				CONTACT_NO,
+				USER_NO,
+				CONTACT_TITLE,
+				CONTACT_CONT,
+				CONTACT_DATE,
+				ADMIN_REPLY,
+				STATUS
+			) VALUES (
+				SEQ_CONTACT_NO.NEXTVAL,
+				#{userNo},
+				#{contactTitle},
+				#{contactCont},
+				SYSDATE,
+				'',
+				'Y'
+			)
 	</insert>
 
-	<update id="membershipUpdate" parameterType="paymentHistory">
-		UPDATE MEMBER
-		SET MEMBERSHIP_NO = #{membershipNo}
-		WHERE USER_NO = #{userNo}
-	</update>
 	
 
 </mapper>

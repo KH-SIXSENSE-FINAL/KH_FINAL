@@ -158,11 +158,6 @@ public class MusicServiceImpl implements MusicService{
 		return musicDao.searchMusic(keyword);
 	}
 
-	@Override
-	public List<String> selectRanking() {
-		return musicDao.selectRanking();
-	}
-
 
 
 }

@@ -47,7 +47,7 @@ public class BoardController {
 			    @RequestParam("userNo") String userNo,
 			    @RequestParam("secret") String secret,
 			    @RequestParam(value="musicNo", required=false) String musicNo) {
-		// 피드 사진파일 레벨 6~10번
+		// 피드 사진파일 레벨 10번
 		int fileLevel = 6;
 		
 		String webPath = "/resources/image/";
@@ -118,6 +118,7 @@ public class BoardController {
 	@GetMapping("/getUserProfileImgList")
 	public ResponseEntity<List<Map<String,String>>> getUserProfileImgList(){
 		List<Map<String,String>> imgList = boardService.getUserProfileImgList();
+		log.info("{}",imgList);
 			return ResponseEntity.ok(imgList);
 	}
 	
@@ -125,6 +126,7 @@ public class BoardController {
 	@GetMapping("/getAllMusicList")
 	public ResponseEntity<List<Map<String,String>>> getAllMusicList(){
 		List<Map<String,String>> allMusicList = boardService.getAllMusicList();
+		log.info("{}",allMusicList);
 			return ResponseEntity.ok(allMusicList);
 	}
 	
@@ -144,7 +146,9 @@ public class BoardController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/insertReply")
 	public ResponseEntity<Reply> insertReply(@RequestBody Reply r ){
+		log.info("리플라이 {}",r);
 		Reply resultR = boardService.insertReply(r);
+		log.info("resultR {}",resultR);
 		
 			if(resultR != null) {
 				return ResponseEntity.ok(resultR);
@@ -152,91 +156,5 @@ public class BoardController {
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resultR);
 			}
 	}
-	
-	
-	
-	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping("/updateBoard")
-	public ResponseEntity<String> updateBoard(
-				@RequestParam(value="files" , required=false) List<MultipartFile> files,
-			    @RequestParam("boardContent") String boardContent,
-			    @RequestParam("userNo") String userNo,
-			    @RequestParam("secret") String secret,
-			    @RequestParam(value="musicNo", required=false) String musicNo,
-			    @RequestParam(value="deleteFileLevel" , required=false) List<Integer> deleteList,
-			    @RequestParam(value="updateFileLevel" , required=false) List<Integer> updateList,
-			    @RequestParam("boardNo") String boardNo) {
-		
-		// 피드 사진파일 레벨 6~10번
-		String webPath = "/resources/image/";
-		String serverFolderPath = application.getRealPath(webPath);	
-		
-		Board b = new Board();
-		b.setBoardContent(boardContent);
-		b.setUserNo(userNo);
-		b.setSecret(secret);
-		b.setMusicNo(musicNo);
-		b.setBoardNo(boardNo);
-		int result = 0;
-		
-		try {
-			result = boardService.updateBoard(b,files,serverFolderPath,webPath,deleteList,updateList);
-			
-		} catch (Exception e) {
-			log.error("error = {}" , e.getMessage());
-		}
-		
-		if(result > 0 ) {
-			return ResponseEntity.ok("게시물 수정 성공하였습니다.");
-		}else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시물 수정 실패하였습니다."); 
-		}
-	}
-	
-	
-	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/getMyBoard")
-	public ResponseEntity<List<BoardExt>> getMyBoard(@RequestParam("userNo") String userNo){
-		
-		List<BoardExt> myBoardList = boardService.getMyBoard(userNo);
-	
-		if(myBoardList.isEmpty() ) {
-			myBoardList.add(new BoardExt());
-			return ResponseEntity.ok(myBoardList); 
-		}else {
-			return ResponseEntity.ok(myBoardList);
-		}
-	}
-	
-	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping("/deleteBoard")
-	public ResponseEntity<String> deleteBoard(
-			    @RequestParam("boardNo") String boardNo) {
-	
-		int result = boardService.deleteBoard(boardNo);
-		
-		if(result > 0 ) {
-			return ResponseEntity.ok("게시물이 삭제되었습니다.");
-		}else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시물 삭제 실패하였습니다."); 
-		}
-	}
-	
-	
-	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping("/deleteReply")
-	public ResponseEntity<String> deleteReply(
-			@RequestBody Reply r) {
-		log.info("댓글번호{}",r);
-		int result = boardService.deleteReply(r);
-		if(result > 0 ) {
-			return ResponseEntity.ok("댓글이 삭제되었습니다.");
-		}else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 삭제 실패하였습니다."); 
-		}
-	}
-	
-	
-	
 	
 }

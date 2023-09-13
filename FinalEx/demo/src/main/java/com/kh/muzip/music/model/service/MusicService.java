@@ -26,5 +26,4 @@ public interface MusicService {
 	void resetDailyCount();
 	void insertKeyword(String keyword);
 	List<Music> searchMusic(String keyword);
-	List<String> selectRanking();
 }
