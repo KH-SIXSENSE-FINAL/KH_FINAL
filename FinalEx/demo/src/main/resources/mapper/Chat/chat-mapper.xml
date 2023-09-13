@@ -80,6 +80,7 @@
 	WHERE CHATROOM_NO = #{chatroomNo}
 	ORDER BY CREATE_DATE ASC
 </select>
+
 <select id ="searchChat" parameterType="string" resultMap="chatRoomResultSet">
 	SELECT *
 	FROM CHAT
@@ -127,4 +128,5 @@
 	DELETE FROM CHAT_JOIN
 	WHERE CHATROOM_NO = #{chatroomNo} AND USER_NO = #{userId}
 </delete>
+
 </mapper>

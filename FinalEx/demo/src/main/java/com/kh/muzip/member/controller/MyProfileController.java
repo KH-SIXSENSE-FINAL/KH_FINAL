@@ -2,7 +2,6 @@ package com.kh.muzip.member.controller;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -11,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -157,74 +154,7 @@ public class MyProfileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("멤버 정보 업데이트에 실패하였습니다.");
         }
     }
-    
-    @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping("/getUserProfile/{userNo}")
-    public ResponseEntity<?> getUserProfile(@PathVariable String userNo) {
-        try {
-        	
-        	 // userNo를 int로 변환
-            int userNoInt = Integer.parseInt(userNo);
 
-            // Service를 통해 userProfile 데이터 가져오기
-            Member memberData = myprofileService.getMemberByUserNo(userNoInt);
-
-         // Service를 통해 Attachment 데이터 가져오기
-            List<Attachment> attachmentDataList = myprofileService.getAttachmentsByUserNo(userNo);
-
-            Map<String, Object> responseMap = new HashMap<>();
-
-            if (memberData != null) {
-                responseMap.put("userInfo", memberData.getUserInfo());
-                responseMap.put("backMuNo", memberData.getBackMuNo());
-            }
-
-            if (attachmentDataList != null && !attachmentDataList.isEmpty()) {
-                for (Attachment attachmentData : attachmentDataList) {
-                    if (attachmentData.getFileLevel() == 1) {
-                        responseMap.put("profileImageURL", attachmentData.getFilePath() + attachmentData.getChangeName());
-                    } else if (attachmentData.getFileLevel() == 2) {
-                        responseMap.put("backgroundImageURL", attachmentData.getFilePath() + attachmentData.getChangeName());
-                    }
-                }
-            }
-
-            return ResponseEntity.ok(responseMap);
-
-        } catch (NumberFormatException e) {
-            log.error("userNo 파싱 오류:", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청입니다.");
-        } catch (Exception e) {
-            log.error("프로필 정보 가져오기 실패:", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("프로필 정보 가져오기 실패");
-        }
-    }
-
-    @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping("/getUserData/{userNo}")
-    public ResponseEntity<?> getUserData(@PathVariable("userNo") String userNo) {
-    	if (userNo == null || "undefined".equals(userNo)) {
-    	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid userNo value");
-    	}
-
-        try {
-            // userNo를 int로 변환
-            int userNoInt = Integer.parseInt(userNo);
-            Member userData = myprofileService.getUserData(userNoInt);
-            
-            if (userData != null) {
-                return ResponseEntity.ok(userData);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 사용자 정보가 없습니다.");
-            }
-        } catch (Exception e) {
-            log.error("사용자 정보 가져오기 에러", e);
-            // 여기서 에러의 세부 내용을 클라이언트에게 반환합니다.
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 내부 에러: " + e.getMessage());
-        }
-    }
-
-    
 
 }
 

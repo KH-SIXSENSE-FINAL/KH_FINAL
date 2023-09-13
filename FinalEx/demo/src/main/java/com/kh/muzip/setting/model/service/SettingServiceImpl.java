@@ -1,15 +1,16 @@
 package com.kh.muzip.setting.model.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.muzip.admin.model.vo.PageInfo;
 import com.kh.muzip.setting.model.dao.SettingDao;
+import com.kh.muzip.setting.model.vo.Contact;
 import com.kh.muzip.setting.model.vo.Genre;
-import com.kh.muzip.setting.model.vo.PaymentHistory;
 import com.kh.muzip.setting.model.vo.setting;
 
 @Service
@@ -71,12 +72,20 @@ public class SettingServiceImpl implements SettingService{
 		
 		return settingDao.withdrawal(userNo);
 	}
-	
-	@Transactional(rollbackFor = {Exception.class})
+
 	@Override
-	public int updateMembership(PaymentHistory p) {
-		
-		return settingDao.updateMembership(p);
+	public int selectContactListCount(String category, String researchinput) {
+		return settingDao.selectContactListCount(category,researchinput);
+	}
+
+	@Override
+	public ArrayList<Contact> selectContactList(PageInfo pi, String category, String researchinput) {
+		return settingDao.selectContactList(pi,category,researchinput);
+	}
+
+	@Override
+	public int insertContact(HashMap<String, Object> map) {
+		return settingDao.insertContact(map);
 	}
 	
 }
