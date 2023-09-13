@@ -291,4 +291,10 @@
 		]]>
 	</select>
 
+	<select id="getGenre" parameterType="string" resultType="string">
+	      SELECT GENRE_NAME
+	      FROM GENRE
+	      WHERE USER_NO = #{userNo}
+  	 </select>
+
 </mapper>
