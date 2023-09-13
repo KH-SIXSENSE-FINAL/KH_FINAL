@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentHistory {
-	
 	private String paymentNo;
 	private Date paymentDate;
 	private String userNo;
