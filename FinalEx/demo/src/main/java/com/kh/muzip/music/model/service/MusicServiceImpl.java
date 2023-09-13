@@ -27,11 +27,6 @@ public class MusicServiceImpl implements MusicService{
 	public ArrayList<Playlist> selectPlaylist(int userNo) {
 		return musicDao.selectPlaylist(userNo);
 	}
-	
-	@Override
-	public List<String> getGenre(String userNo){
-		return musicDao.getGenre(userNo);
-	}
 
 	@Override
 	public ArrayList<ArrayList<Music>> selectRecommendList(List<String> genreList) {
@@ -161,6 +156,11 @@ public class MusicServiceImpl implements MusicService{
 	@Override
 	public List<Music> searchMusic(String keyword) {
 		return musicDao.searchMusic(keyword);
+	}
+
+	@Override
+	public List<String> selectRanking() {
+		return musicDao.selectRanking();
 	}
 
 

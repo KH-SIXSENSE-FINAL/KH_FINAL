@@ -51,12 +51,6 @@
 		ORDER BY PS.ENROLL_DATE
 	</select>
 	
-	<select id="getGenre" parameterType="string" resultType="string">
-		SELECT GENRE_NAME
-		FROM GENRE
-		WHERE USER_NO = #{userNo}
-	</select>
-	
 	<select id="nonGenreRecommendSongs" resultMap="musicResultSet">
 		SELECT *
 		FROM (
@@ -128,9 +122,9 @@
 		    FROM MUSIC M
 		    JOIN MUSIC_FILE MF USING(MUSIC_NO) 
 		    WHERE M.STATUS='Y' 
-		    	  AND (UPPER(M.MUSIC_TITLE) LIKE UPPER('%' || #{keyword} || '%')
-		    	  	   OR UPPER(M.MUSIC_ARTIST) LIKE UPPER('%' || #{keyword} || '%')
-		    	  	   OR UPPER(M.GENRE) LIKE UPPER('%' || #{keyword} || '%'))
+		    	  AND (UPPER(REPLACE(M.MUSIC_TITLE, ' ', '')) LIKE UPPER('%' || REPLACE(#{keyword}, ' ', '') || '%')
+		    	  	   OR UPPER(REPLACE(M.MUSIC_ARTIST, ' ', '')) LIKE UPPER('%' || REPLACE(#{keyword}, ' ', '') || '%')
+		    	  	   OR UPPER(REPLACE(M.GENRE, ' ', '')) LIKE UPPER('%' || REPLACE(#{keyword}, ' ', '') || '%'))
 		    ORDER BY PLAY_COUNT DESC
 		)
 	</select>
@@ -187,6 +181,12 @@
 		)
 	</insert>
 	
+	<select id="selectOneMusic" parameterType="string" resultMap="musicResultSet">
+		SELECT MUSIC_NO, MUSIC_TITLE, MUSIC_ARTIST, MUSIC_LYRICS, GENRE, ENROLL_DATE, PLAY_COUNT, DAILY_COUNT, HOUR_COUNT, M.STATUS STATUS, MUSIC_PATH, COVER_PATH
+		FROM MUSIC M
+		JOIN MUSIC_FILE MF USING(MUSIC_NO)
+		WHERE M.STATUS = 'Y' AND MUSIC_NO = #{musicNo}
+	</select>
 	<select id="selectOneMusicFile" parameterType="string">
 		SELECT *
 		FROM MUSIC_FILE
@@ -245,12 +245,6 @@
 		WHERE PLAYLIST_NO = #{playlistNo}
 	</delete>
 	
-	<select id="selectOneMusic" parameterType="string" resultMap="musicResultSet">
-		SELECT *
-		FROM MUSIC
-		WHERE STATUS = 'Y' AND MUSIC_NO = #{musicNo}
-	</select>
-	
 	<insert id="addPlaylistSong" parameterType="map">
 		INSERT INTO PLAYLIST_SONGS
 		(
@@ -286,5 +280,15 @@
 		UPDATE MUSIC
 		SET DAILY_COUNT = 0
 	</update>
+	
+	<select id="selectRanking" resultType="string">
+		<![CDATA[
+		SELECT KEYWORD, COUNT(*)
+		FROM SEARCH
+		WHERE SEARCH_DATE > SYSDATE-1/24
+		GROUP BY KEYWORD
+		ORDER BY COUNT(*) DESC
+		]]>
+	</select>
 
 </mapper>
