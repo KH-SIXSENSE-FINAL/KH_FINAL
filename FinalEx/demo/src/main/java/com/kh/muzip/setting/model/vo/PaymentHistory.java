@@ -14,5 +14,5 @@ public class PaymentHistory {
 	private String paymentNo;
 	private Date paymentDate;
 	private String userNo;
-	private String membershipNo;
+	private int membershipNo;
 }

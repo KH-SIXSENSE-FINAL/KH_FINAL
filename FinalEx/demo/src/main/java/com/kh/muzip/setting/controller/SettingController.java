@@ -161,14 +161,15 @@ public class SettingController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/updateMembership")
 	public ResponseEntity<String> updateMembership(@RequestBody PaymentHistory p ) {
-
+		String msg = p.getMembershipNo() == 1 ? "구독 취소되었습니다." :
+					 p.getMembershipNo() == 2 ? "리스너플랜이 구독되었습니다." : "라이터플랜이 구독되었습니다.";
 		int result = settingService.updateMembership(p);
 
 		if(result > 0) {
 			
-			return ResponseEntity.ok().body("성공");
+			return ResponseEntity.ok().body(msg);
 		}else {
-			return ResponseEntity.badRequest().body("실패");
+			return ResponseEntity.badRequest().body("실패하였습니다.");
 			
 		}
 	}
