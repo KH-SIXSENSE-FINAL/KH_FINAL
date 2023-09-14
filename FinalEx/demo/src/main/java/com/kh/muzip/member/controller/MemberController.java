@@ -61,12 +61,9 @@ public class MemberController {
             
             if (passwordMatches) {
                 return ResponseEntity.ok(loginUser); // 로그인 성공
-            } else {
-                return ResponseEntity.badRequest().body(null); // 비밀번호 불일치
-            }
-        } else {
-            return ResponseEntity.notFound().build(); // 사용자를 찾을 수 없음
-        }
+            } 
+        } 
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
     
     @CrossOrigin(origins = "http://localhost:3000")
