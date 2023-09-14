@@ -132,6 +132,59 @@
 		WHERE MUSIC_NO = #{musicNo}
 	</update>
 
+	<!-- 여기는 멤버리스트 정렬 -->
+	<select id="selectMemberListBySort" resultMap="memberResultSet">
+	    SELECT * 
+	    FROM MEMBER
+	    <choose>
+	        <when test="sortBy == 'userNo'">
+			    ORDER BY TO_NUMBER(USER_NO) ASC
+			</when>
+	        <when test="sortBy == 'userName'">
+	            ORDER BY USER_NAME
+	        </when>
+	        <when test="sortBy == 'userId'">
+	            ORDER BY USER_ID
+	        </when>
+	        
+	        
+	        <otherwise>
+	            ORDER BY TO_NUMBER(USER_NO) DESC 
+	        </otherwise>
+	    </choose>
+	</select>
+
+<select id="selectMemberListBySearchQuery" resultMap="memberResultSet">
+    SELECT * 
+    FROM MEMBER
+    WHERE 
+    <choose>
+        <when test="searchQuery != null and searchQuery != ''">
+            (TO_CHAR(USER_NO) LIKE CONCAT('%', #{searchQuery}, '%') OR 
+            USER_ID LIKE CONCAT('%', #{searchQuery}, '%') OR 
+            USER_NAME LIKE CONCAT('%', #{searchQuery}, '%') OR
+            EMAIL LIKE CONCAT('%', #{searchQuery}, '%'))
+        </when>
+        <otherwise>
+            1 = 1
+        </otherwise>
+    </choose>
+    <choose>
+        <when test="sortBy == 'userNo'">
+            ORDER BY TO_NUMBER(USER_NO) ASC
+        </when>
+        <when test="sortBy == 'userName'">
+            ORDER BY USER_NAME
+        </when>
+        <when test="sortBy == 'userId'">
+            ORDER BY USER_ID
+        </when>
+        <otherwise>
+            ORDER BY TO_NUMBER(USER_NO) DESC 
+        </otherwise>
+    </choose>
+</select>
+
 
 
 
