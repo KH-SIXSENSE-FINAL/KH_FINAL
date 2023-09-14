@@ -136,54 +136,38 @@
 	<select id="selectMemberListBySort" resultMap="memberResultSet">
 	    SELECT * 
 	    FROM MEMBER
+	    <where>
+	        <choose>
+	            <when test="searchTerm != null and searchTerm != ''">
+	               (USER_NO LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR 
+					USER_NAME LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR 
+					USER_ID LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR 
+					EMAIL LIKE CONCAT(CONCAT('%', #{searchTerm}), '%'))
+
+	            </when>
+	            <otherwise>
+	                <!-- 이 경우에는 모든 회원을 가져옵니다. -->
+	            </otherwise>
+	        </choose>
+	    </where>
 	    <choose>
 	        <when test="sortBy == 'userNo'">
-			    ORDER BY TO_NUMBER(USER_NO) ASC
-			</when>
+	            ORDER BY TO_NUMBER(USER_NO) ASC
+	        </when>
 	        <when test="sortBy == 'userName'">
 	            ORDER BY USER_NAME
 	        </when>
 	        <when test="sortBy == 'userId'">
 	            ORDER BY USER_ID
 	        </when>
-	        
-	        
 	        <otherwise>
 	            ORDER BY TO_NUMBER(USER_NO) DESC 
 	        </otherwise>
 	    </choose>
 	</select>
 
-<select id="selectMemberListBySearchQuery" resultMap="memberResultSet">
-    SELECT * 
-    FROM MEMBER
-    WHERE 
-    <choose>
-        <when test="searchQuery != null and searchQuery != ''">
-            (TO_CHAR(USER_NO) LIKE CONCAT('%', #{searchQuery}, '%') OR 
-            USER_ID LIKE CONCAT('%', #{searchQuery}, '%') OR 
-            USER_NAME LIKE CONCAT('%', #{searchQuery}, '%') OR
-            EMAIL LIKE CONCAT('%', #{searchQuery}, '%'))
-        </when>
-        <otherwise>
-            1 = 1
-        </otherwise>
-    </choose>
-    <choose>
-        <when test="sortBy == 'userNo'">
-            ORDER BY TO_NUMBER(USER_NO) ASC
-        </when>
-        <when test="sortBy == 'userName'">
-            ORDER BY USER_NAME
-        </when>
-        <when test="sortBy == 'userId'">
-            ORDER BY USER_ID
-        </when>
-        <otherwise>
-            ORDER BY TO_NUMBER(USER_NO) DESC 
-        </otherwise>
-    </choose>
-</select>
+
+
 
 
 

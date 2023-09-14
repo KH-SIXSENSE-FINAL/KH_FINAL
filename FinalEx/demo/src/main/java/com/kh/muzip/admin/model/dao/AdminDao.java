@@ -140,13 +140,14 @@ public class AdminDao {
 
 
 
-	public ArrayList<Member> selectMemberList(PageInfo pi, String sortBy) {
+	public ArrayList<Member> selectMemberList(PageInfo pi, String sortBy, String searchTerm) {
 	    int limit = pi.getBoardLimit();
 	    int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 
 	    HashMap<String, Object> map = new HashMap<>();
 	    map.put("sortBy", sortBy);
-	    
+	    map.put("searchTerm", searchTerm); // searchTerm 추가
+
 	    RowBounds rowBounds = new RowBounds(offset, limit);
 
 	    return (ArrayList) session.selectList("admin.selectMemberListBySort", map, rowBounds);
@@ -156,14 +157,8 @@ public class AdminDao {
 
 
 
-	public ArrayList<Member> selectMemberListBySearchQuery(String searchQuery, String sortBy) {
-	    
-	    HashMap<String, Object> map = new HashMap<>();
-	    map.put("searchQuery", searchQuery);
-	    map.put("sortBy", sortBy);
-	    
-	    return (ArrayList) session.selectList("admin.selectMemberListBySearchQuery", map);
-	}
+
+	
 
 
 

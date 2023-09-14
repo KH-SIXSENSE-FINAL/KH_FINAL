@@ -46,26 +46,19 @@ public class AdminController {
 	    
 	    int listCount = adminService.selectMemberListCount();
 	    int currentPage = m.get("currentPage") != null ? (int) m.get("currentPage") : 1;
-	    String sortBy = m.get("sortBy") != null ? (String) m.get("sortBy") : "default";
-	    String searchQuery = m.get("searchQuery") != null ? (String) m.get("searchQuery") : null; // 검색어 추가
+	    String sortBy = m.get("sortBy") != null ? (String) m.get("sortBy") : "default"; 
+	    String searchTerm = m.get("searchTerm") != null ? (String) m.get("searchTerm") : null;
 
 	    int pageLimit = 10; // 페이지 하단에 보여질 페이징바의 페이지 최대 갯수
 	    int boardLimit = 10; // 한 페이지에 보여질 게시글의 최대 갯수
 
 	    PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-
-	    ArrayList<Member> list;
-
-	    if(searchQuery != null && !searchQuery.trim().isEmpty()) {
-	        // 검색어가 있을 경우, 검색어 기반으로 회원 목록 가져오기
-	        list = adminService.selectMemberListBySearchQuery(searchQuery, sortBy);
-	    } else {
-	        // 검색어가 없을 경우, 기존 로직 사용 , 여기엔 정렬바꾸는거 포함
-	        list = adminService.selectMemberList(pi, sortBy);
-	    }
+	    // 이건 정렬바꿀때 필요
+	    ArrayList<Member> list = adminService.selectMemberList(pi, sortBy, searchTerm); // 검색어 추가
 
 	    return ResponseEntity.ok().body(list);
 	}
+
 
 
 
