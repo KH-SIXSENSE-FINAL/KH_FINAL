@@ -35,4 +35,8 @@ public interface AdminService {
 
 	int adminRestoreMusic(Music music);
 
+	ArrayList<Member> selectMemberList(PageInfo pi, String sortBy);
+
+	ArrayList<Member> selectMemberListBySearchQuery(String searchQuery, String sortBy);
+
 }
