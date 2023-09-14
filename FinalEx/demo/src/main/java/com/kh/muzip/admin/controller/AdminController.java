@@ -43,18 +43,24 @@ public class AdminController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/selectMemberList")
 	public ResponseEntity<?> selectMemberList(@RequestBody HashMap<String, Object> m) {
+	    
+	    int listCount = adminService.selectMemberListCount();
+	    int currentPage = m.get("currentPage") != null ? (int) m.get("currentPage") : 1;
+	    String sortBy = m.get("sortBy") != null ? (String) m.get("sortBy") : "default"; 
+	    String searchTerm = m.get("searchTerm") != null ? (String) m.get("searchTerm") : null;
 
+	    int pageLimit = 10; // 페이지 하단에 보여질 페이징바의 페이지 최대 갯수
+	    int boardLimit = 10; // 한 페이지에 보여질 게시글의 최대 갯수
 
-		int listCount = adminService.selectMemberListCount();
-		int currentPage = m.get("currentPage") != null ? (int) m.get("currentPage") : 1;
-		int pageLimit = 10; // 페이지 하단에 보여질 페이징바의 페이지 최대 갯수
-		int boardLimit = 10; // 한 페이지에 보여질 게시글의 최대 갯수
+	    PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+	    // 이건 정렬바꿀때 필요
+	    ArrayList<Member> list = adminService.selectMemberList(pi, sortBy, searchTerm); // 검색어 추가
 
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		ArrayList<Member> list = adminService.selectMemberList(pi);
-
-		return ResponseEntity.ok().body(list);
+	    return ResponseEntity.ok().body(list);
 	}
+
+
+
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/updateMemberinfo")

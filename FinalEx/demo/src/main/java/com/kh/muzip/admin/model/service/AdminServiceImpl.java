@@ -84,6 +84,14 @@ public class AdminServiceImpl implements AdminService {
 	public int adminRestoreMusic(Music music) {
 		return adminDao.adminRestoreMusic(music);
 	}
+
+	@Override
+	public ArrayList<Member> selectMemberList(PageInfo pi, String sortBy,String searchTerm) {
+	    return adminDao.selectMemberList(pi, sortBy,searchTerm);
+	}
+
+	
+
 	
 	
 }
