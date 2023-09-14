@@ -59,12 +59,21 @@ public class MusicController {
 	}
 	
 	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/getGenre")
+	public List<String> getGenre(
+			@RequestParam("userNo") String userNo
+			){		
+		List<String> genreList = musicService.getGenre(userNo);
+		
+		return genreList;
+		
+	}
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/recommendList")
 	public ArrayList<ArrayList<Music>> recommendList(
 			@RequestBody Map<String, List<String>> requestData
 			){
 		List<String> genreList = requestData.get("genre");
-		
 		ArrayList<ArrayList<Music>> recommendList = musicService.selectRecommendList(genreList);
 		
 		return recommendList;
@@ -224,7 +233,7 @@ public class MusicController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/selectOneMusic")
 	public Music selectOneMusic(
-			@RequestParam("playlistNo") String musicNo
+			@RequestParam("musicNo") String musicNo
 			){
 		return musicService.selectOneMusic(musicNo);
 	}
