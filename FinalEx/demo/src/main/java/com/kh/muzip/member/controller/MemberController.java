@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.muzip.member.model.service.MemberService;
+import com.kh.muzip.member.model.service.MyProfileService;
 import com.kh.muzip.member.model.vo.Follow;
 import com.kh.muzip.member.model.vo.Member;
 
@@ -33,6 +34,9 @@ public class MemberController {
 	
     @Autowired
     private MemberService memberService;
+    
+    @Autowired
+    private MyProfileService myprofileService;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/enrollM")
@@ -124,29 +128,12 @@ public class MemberController {
         }
     }
     
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    @GetMapping("/userInfo")
+    public ResponseEntity<String> addFollow(@RequestParam("userNo") String userNo){
+    	Member userData = myprofileService.getUserData(Integer.parseInt(userNo));
+    	String userInfo = userData.getUserInfo();
+        return ResponseEntity.ok(userInfo);
+    }
 }
 
 

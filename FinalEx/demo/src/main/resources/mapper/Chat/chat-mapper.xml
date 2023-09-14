@@ -6,6 +6,8 @@
 	<result column ="USER_NO" property="userId"/>
 	<result column = "CHATROOM_NAME" property="chatroomName"/>
 	<result column = "STATUS" property="status"/>
+	<result column = "MESSAGE" property="viewMsg"/>
+	<result column = "CREATE_DATE" property="viewDate"/>
 </resultMap>
 
 <resultMap id="chatMessageResultSet" type="chatMessage">
@@ -47,19 +49,19 @@
 	SELECT COUNT(*)
 	FROM CHAT
 	JOIN CHAT_JOIN USING(CHATROOM_NO)
-	WHERE CHAT.USER_NO = #{memberId} AND CHAT_JOIN.USER_NO = #{userId}
+	WHERE CHAT.USER_NO = #{memberId} AND CHAT_JOIN.USER_NO = #{userId} AND CHATROOM_NAME IN (#{userId}, #{memberId})
 
 </select>
 <select id="checkedRoom" resultType="int">
 	SELECT CHATROOM_NO
 	FROM CHAT
 	JOIN CHAT_JOIN USING(CHATROOM_NO)
-	WHERE CHAT.USER_NO = #{userId} AND CHAT_JOIN.USER_NO = #{memberId}
+	WHERE CHAT.USER_NO = #{userId} AND CHAT_JOIN.USER_NO = #{memberId} AND CHATROOM_NAME IN (#{userId}, #{memberId})
 	UNION
 	SELECT CHATROOM_NO
 	FROM CHAT
 	JOIN CHAT_JOIN USING(CHATROOM_NO)
-	WHERE CHAT.USER_NO = #{memberId} AND CHAT_JOIN.USER_NO = #{userId}
+	WHERE CHAT.USER_NO = #{memberId} AND CHAT_JOIN.USER_NO = #{userId} AND CHATROOM_NAME IN (#{userId}, #{memberId})
 </select>
 <select id="checkjoinRoom" resultType="int">
 	SELECT COUNT(*)
@@ -85,7 +87,6 @@
 </select>
 <select id="Chatlist" parameterType="String" resultMap="chatRoomResultSet">
 	SELECT *
-<<<<<<< HEAD
 	FROM CHAT c
 	LEFT JOIN (
 	SELECT
@@ -105,10 +106,6 @@
 	#{userId})
 	ORDER BY latest_msg.CREATE_DATE DESC NULLS LAST
 
-=======
-	FROM CHAT
-	WHERE CHATROOM_NO IN (SELECT CHATROOM_NO FROM CHAT_JOIN WHERE USER_NO = #{userId})
->>>>>>> 574536133d551d3d17b3707e4cc53cc3b46e3d22
 </select>
 
 <insert id = "createGroupChatRoom" parameterType="chatRoom" useGeneratedKeys = "true">
