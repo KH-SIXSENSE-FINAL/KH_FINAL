@@ -1,12 +1,16 @@
 package com.kh.muzip.setting.model.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.muzip.admin.model.vo.PageInfo;
+import com.kh.muzip.setting.model.vo.Contact;
 import com.kh.muzip.setting.model.vo.Genre;
 import com.kh.muzip.setting.model.vo.PaymentHistory;
 import com.kh.muzip.setting.model.vo.setting;
@@ -93,6 +97,33 @@ public class SettingDao {
 			result =  session.update("setting.membershipUpdate", p);
 		}
 		return result;
+	}
+	
+public int selectContactListCount(String category, String researchinput) {
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("category", category);
+		map.put("researchinput", researchinput);
+		
+		return session.selectOne("setting.selectContactListCount",map);
+	}
+
+	public ArrayList<Contact> selectContactList(PageInfo pi, String category, String researchinput) {
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("category", category);
+		map.put("researchinput", researchinput);
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() -1) * 10;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)session.selectList("setting.selectContactList", map, rowBounds);
+	}
+
+	public int insertContact(HashMap<String, Object> map) {
+		return session.insert("setting.insertContact",map);
 	}
 
 	
