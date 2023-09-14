@@ -134,6 +134,32 @@ public class AdminDao {
 
 	public int adminRestoreMusic(Music music) {
 		return session.update("admin.adminRestoreMusic",music);
-	} 
+	}
+
+
+
+
+
+	public ArrayList<Member> selectMemberList(PageInfo pi, String sortBy, String searchTerm) {
+	    int limit = pi.getBoardLimit();
+	    int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+
+	    HashMap<String, Object> map = new HashMap<>();
+	    map.put("sortBy", sortBy);
+	    map.put("searchTerm", searchTerm); // searchTerm 추가
+
+	    RowBounds rowBounds = new RowBounds(offset, limit);
+
+	    return (ArrayList) session.selectList("admin.selectMemberListBySort", map, rowBounds);
+	}
+
+
+
+
+
+
+	
+
+
 
 }
