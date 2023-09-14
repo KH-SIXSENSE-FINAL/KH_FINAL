@@ -46,6 +46,7 @@
 	 	
 	 	<id column="BOARD_NO" property="boardNo"/>
 		<result column="USER_NO" property="userNo"/>
+		<result column="USER_NAME" property="userId"/>
 		<result column="BOARD_CONTENT" property="boardContent"/>
 		<result column="CREATE_DATE" property="createDate"/>
 		<result column="SECRET" property="secret"/>
@@ -136,16 +137,18 @@
 	 </select>
 	 
 	 <select id="selectBoardList" resultMap="selectBoardListResultSet">
-	 	SELECT BOARD_NO,
-	 		   USER_NO,
-	 		   BOARD_CONTENT,
-	 		   CREATE_DATE,
-	 		   SECRET,
-	 		   STATUS,
-	 		   MUSIC_NO
-	 	FROM BOARD
-	 	WHERE STATUS = 'Y'
-	 	ORDER BY TO_NUMBER(BOARD_NO) DESC
+	 	SELECT B.BOARD_NO,
+	 		   B.USER_NO,
+               M.USER_NAME,
+	 		   B.BOARD_CONTENT,
+	 		   B.CREATE_DATE,
+	 		   B.SECRET,
+	 		   B.STATUS,
+	 		   B.MUSIC_NO
+	 	FROM BOARD B
+        JOIN MEMBER M ON M.USER_NO = B.USER_NO
+	 	WHERE B.STATUS = 'Y'
+        ORDER BY TO_NUMBER(BOARD_NO) DESC
 	 </select>
   
   
