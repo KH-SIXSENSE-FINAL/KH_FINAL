@@ -290,6 +290,10 @@ public class MusicController {
 		musicService.insertKeyword(keyword);
 	}
 	
-
+	@CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/selectRanking")
+    public List<String> selectRanking(){
+    	return musicService.selectRanking();
+    }
 
 }
