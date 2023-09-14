@@ -86,14 +86,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public ArrayList<Member> selectMemberList(PageInfo pi, String sortBy) {
-	    return adminDao.selectMemberList(pi, sortBy);
+	public ArrayList<Member> selectMemberList(PageInfo pi, String sortBy,String searchTerm) {
+	    return adminDao.selectMemberList(pi, sortBy,searchTerm);
 	}
 
-	@Override
-	public ArrayList<Member> selectMemberListBySearchQuery(String searchQuery, String sortBy) {
-		return adminDao.selectMemberListBySearchQuery(searchQuery, sortBy);
-	}
+	
 
 	
 	
