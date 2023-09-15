@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.muzip.member.model.service.MemberService;
+import com.kh.muzip.member.model.service.MyProfileService;
 import com.kh.muzip.member.model.vo.Follow;
 import com.kh.muzip.member.model.vo.Member;
 
@@ -33,6 +34,9 @@ public class MemberController {
 	
     @Autowired
     private MemberService memberService;
+    
+    @Autowired
+    private MyProfileService myprofileService;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/enrollM")
@@ -61,12 +65,9 @@ public class MemberController {
             
             if (passwordMatches) {
                 return ResponseEntity.ok(loginUser); // 로그인 성공
-            } else {
-                return ResponseEntity.badRequest().body(null); // 비밀번호 불일치
-            }
-        } else {
-            return ResponseEntity.notFound().build(); // 사용자를 찾을 수 없음
-        }
+            } 
+        } 
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
     
     @CrossOrigin(origins = "http://localhost:3000")
@@ -127,29 +128,12 @@ public class MemberController {
         }
     }
     
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    @GetMapping("/userInfo")
+    public ResponseEntity<String> addFollow(@RequestParam("userNo") String userNo){
+    	Member userData = myprofileService.getUserData(Integer.parseInt(userNo));
+    	String userInfo = userData.getUserInfo();
+        return ResponseEntity.ok(userInfo);
+    }
 }
 
 

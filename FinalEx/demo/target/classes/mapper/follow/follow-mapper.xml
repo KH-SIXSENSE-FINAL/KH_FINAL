@@ -62,13 +62,15 @@
     </select>
     
 <select id = "chatRoomFriend" parameterType="string" resultMap="followResultSet">
-	SELECT MEMBER_ID
+	SELECT FOLLOW.MEMBER_ID, FOLLOW.STATUS, MEMBER.USER_NO
 	FROM FOLLOW
-	WHERE USER_ID = #{userId} AND STATUS = 'Y'
+	JOIN MEMBER ON FOLLOW.MEMBER_ID = MEMBER.USER_ID
+	WHERE FOLLOW.USER_ID = #{userId} AND FOLLOW.STATUS = 'Y'
 </select>
 <select id="searchMembers" parameterType="string" resultMap="followResultSet">
-	SELECT MEMBER_ID
+	SELECT MEMBER_ID,MEMBER.USER_NO
 	FROM FOLLOW
-	WHERE USER_ID = #{userId} AND MEMBER_ID LIKE '%'|| #{query}|| '%' AND STATUS ='Y'
+	JOIN MEMBER ON FOLLOW.MEMBER_ID = MEMBER.USER_ID
+	WHERE FOLLOW.USER_ID = #{userId} AND FOLLOW.MEMBER_ID LIKE '%'|| #{query}|| '%' AND FOLLOW.STATUS ='Y'
 </select>
 </mapper>
