@@ -178,15 +178,23 @@ public class SettingController {
 	
 	
 
+	
+	
+	
 	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping("/selectContactListCount")
-	public ResponseEntity<?> selectContactListCount(@RequestBody HashMap<String, Object> m){
-		
+	@PostMapping("/userSelectContactListCount")
+	public ResponseEntity<?> userSelectContactListCount(@RequestBody HashMap<String, Object> m){
+		String userNo = (String)m.get("userNo");
 		String category = (String)m.get("category");
 		String researchinput = (String)m.get("researchinput");
 		
-		int listCount = settingService.selectContactListCount(category, researchinput);
-
+		HashMap<String, Object> map = new HashMap();
+		map.put("userNo", userNo);
+		map.put("category", category);
+		map.put("researchinput", researchinput);
+		
+		int listCount = settingService.selectContactListCount(map);
+		
 		return ResponseEntity.ok().body(listCount);
 		
 		
@@ -194,23 +202,27 @@ public class SettingController {
 	
 	
 	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping("/selectContactList")
-	public ResponseEntity<?> selectContactList(@RequestBody HashMap<String, Object> m){
-		
+	@PostMapping("/userSelectContactList")
+	public ResponseEntity<?> userSelectContactList(@RequestBody HashMap<String, Object> m){
+		String userNo = (String)m.get("userNo");
 		String category = (String)m.get("category");
 		String researchinput = (String)m.get("researchinput");
 		
-		int listCount = settingService.selectContactListCount(category, researchinput);
+		HashMap<String, Object> map = new HashMap();
+		map.put("userNo", userNo);
+		map.put("category", category);
+		map.put("researchinput", researchinput);
+		
+		int listCount = settingService.selectContactListCount(map);
 		int currentPage = m.get("currentPage") != null ? (int) m.get("currentPage") : 1;
 		int pageLimit = 10; // 페이지 하단에 보여질 페이징바의 페이지 최대 갯수
 		int boardLimit = 10; // 한 페이지에 보여질 게시글의 최대 갯수
-
+		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		ArrayList<Contact> list = settingService.selectContactList(pi,category, researchinput);
-
+		map.put("pi", pi);
+		ArrayList<Contact> list = settingService.selectContactList(map);
+		
 		return ResponseEntity.ok().body(list);
-		
-		
 	}
 	
 	
