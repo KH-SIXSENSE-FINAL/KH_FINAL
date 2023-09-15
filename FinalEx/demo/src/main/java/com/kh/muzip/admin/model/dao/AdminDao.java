@@ -13,6 +13,12 @@ import com.kh.muzip.admin.model.vo.PageInfo;
 import com.kh.muzip.board.model.vo.Board;
 import com.kh.muzip.member.model.vo.Member;
 import com.kh.muzip.music.model.vo.Music;
+<<<<<<< HEAD
+=======
+import com.kh.muzip.setting.model.vo.Contact;
+import com.kh.muzip.setting.model.vo.Genre;
+import com.kh.muzip.setting.model.vo.PaymentHistory;
+>>>>>>> dc870cf777995258c274481fc3a04d25263a4512
 
 @Repository
 public class AdminDao {
@@ -177,18 +183,61 @@ public class AdminDao {
 
 
 
+<<<<<<< HEAD
 	
+=======
+	public int updateAdminReply(HashMap<String, Object> map) {
+		return session.update("admin.updateAdminReply",map);
+	}
+>>>>>>> dc870cf777995258c274481fc3a04d25263a4512
 
 
 
 
 
+<<<<<<< HEAD
 	
+=======
+	public int DeleteContact(HashMap<String, Object> map) {
+		return session.update("admin.DeleteContact",map);
+	}
+>>>>>>> dc870cf777995258c274481fc3a04d25263a4512
 
 
 
 
 
+<<<<<<< HEAD
+=======
+	public int RestoreContact(HashMap<String, Object> map) {
+		return session.update("admin.RestoreContact",map);
+	}
+
+
+
+
+
+	public int selectPaymentListCount(HashMap<String, Object> map) {
+		return session.selectOne("admin.selectPaymentListCount",map);
+	}
+
+
+
+
+
+	public ArrayList<PaymentHistory> selectPaymentList(HashMap<String, Object> map) {
+		int limit = ((PageInfo)map.get("pi")).getBoardLimit();
+		int offset = (((PageInfo)map.get("pi")).getCurrentPage() -1) * 10;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)session.selectList("admin.selectPaymentList", map, rowBounds);
+	}
+
+
+
+
+>>>>>>> dc870cf777995258c274481fc3a04d25263a4512
 
 
 	

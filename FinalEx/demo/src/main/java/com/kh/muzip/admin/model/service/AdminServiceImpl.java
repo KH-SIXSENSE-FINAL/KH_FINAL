@@ -1,6 +1,7 @@
 package com.kh.muzip.admin.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import com.kh.muzip.board.model.vo.Board;
 import com.kh.muzip.member.model.vo.Member;
 import com.kh.muzip.music.model.vo.Music;
 import com.kh.muzip.setting.model.dao.SettingDao;
+import com.kh.muzip.setting.model.vo.Contact;
 import com.kh.muzip.setting.model.vo.Genre;
+import com.kh.muzip.setting.model.vo.PaymentHistory;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -98,6 +101,31 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public ArrayList<Member> selectMemberList(PageInfo pi, String sortBy,String searchTerm) {
 	    return adminDao.selectMemberList(pi, sortBy,searchTerm);
+	}
+
+	@Override
+	public int updateAdminReply(HashMap<String, Object> map) {
+		return adminDao.updateAdminReply(map);
+	}
+
+	@Override
+	public int DeleteContact(HashMap<String, Object> map) {
+		return adminDao.DeleteContact(map);
+	}
+
+	@Override
+	public int RestoreContact(HashMap<String, Object> map) {
+		return adminDao.RestoreContact(map);
+	}
+
+	@Override
+	public int selectPaymentListCount(HashMap<String, Object> map) {
+		return adminDao.selectPaymentListCount(map);
+	}
+
+	@Override
+	public ArrayList<PaymentHistory> selectPaymentList(HashMap<String, Object> map) {
+		return adminDao.selectPaymentList(map);
 	}
 
 	

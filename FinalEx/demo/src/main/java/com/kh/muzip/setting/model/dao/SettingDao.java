@@ -99,23 +99,19 @@ public class SettingDao {
 		return result;
 	}
 	
-public int selectContactListCount(String category, String researchinput) {
+public int selectContactListCount(HashMap<String, Object> map) {
 		
-		HashMap<String, Object> map = new HashMap();
-		map.put("category", category);
-		map.put("researchinput", researchinput);
+		
 		
 		return session.selectOne("setting.selectContactListCount",map);
 	}
 
-	public ArrayList<Contact> selectContactList(PageInfo pi, String category, String researchinput) {
+	public ArrayList<Contact> selectContactList(HashMap<String, Object> map) {
 		
-		HashMap<String, Object> map = new HashMap();
-		map.put("category", category);
-		map.put("researchinput", researchinput);
 		
-		int limit = pi.getBoardLimit();
-		int offset = (pi.getCurrentPage() -1) * 10;
+		
+		int limit = ((PageInfo)map.get("pi")).getBoardLimit();
+		int offset = (((PageInfo)map.get("pi")).getCurrentPage() -1) * 10;
 		
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		

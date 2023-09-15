@@ -23,7 +23,7 @@ public interface SettingService {
 	int changeSetting(int userNo, String cName, String result);
 	int withdrawal(int userNo);
 	int updateMembership(PaymentHistory p);
-	int selectContactListCount(String category, String researchinput);
-	ArrayList<Contact> selectContactList(PageInfo pi, String category, String researchinput);
+	int selectContactListCount(HashMap<String, Object> map);
+	ArrayList<Contact> selectContactList(HashMap<String, Object> map);
 	int insertContact(HashMap<String, Object> map);
 }
