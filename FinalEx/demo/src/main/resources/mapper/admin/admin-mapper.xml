@@ -65,40 +65,39 @@
 		SELECT COUNT(*)
 		FROM MEMBER
 	</select>
-
+	
 
 	<select id="selectMemberList" resultType="member">
 		SELECT *
 		FROM MEMBER
 		ORDER BY TO_NUMBER(USER_NO) DESC
 	</select>
-
-
-	<update id="updateMemberinfo" parameterType="member">
+	
+	
+	<update id="updateMemberinfo"  parameterType="member">
 		UPDATE MEMBER
-		SET
-		USER_ID = #{userId},
-		USER_NAME = #{userName},
-		EMAIL = #{email},
-		MEMBERSHIP_NO = #{membershipNo},
-		STATUS = #{status}
+		SET 
+			USER_ID = #{userId},
+			USER_NAME = #{userName},
+			EMAIL = #{email},
+			MEMBERSHIP_NO = #{membershipNo},
+			STATUS = #{status}
 		WHERE USER_NO = #{userNo}
 	</update>
-
-	<update id="WithdrawalMemberinfo" parameterType="member">
+	
+	<update id="WithdrawalMemberinfo"  parameterType="member">
 		UPDATE MEMBER
 		SET STATUS = 'N'
 		WHERE USER_NO = #{userNo}
 	</update>
-
-
-	<update id="RestoreMemberinfo" parameterType="member">
+	
+	
+	<update id="RestoreMemberinfo"  parameterType="member">
 		UPDATE MEMBER
-		SET
-		STATUS = 'Y'
+		SET STATUS = 'Y'
 		WHERE USER_NO = #{userNo}
 	</update>
-
+	
 	<!-- 회원관리 -->
 
 	<select id="selectContentListCount" resultType="int">
@@ -106,7 +105,6 @@
 		FROM BOARD
 	</select>
 
-<<<<<<< HEAD
 	<select id="selectContentList" resultType="board" parameterType="map">
 	    SELECT B.BOARD_NO,B.USER_NO, M.USER_ID, B.BOARD_CONTENT, B.CREATE_DATE, B.SECRET, B.MUSIC_NO, B.STATUS
 	    FROM BOARD B
@@ -143,16 +141,6 @@
 	            ORDER BY TO_NUMBER(B.BOARD_NO) DESC
 	        </otherwise>
 	    </choose>
-=======
-	<select id="selectContentList" resultType="board">
-		SELECT B.BOARD_NO,
-		M.USER_ID, B.BOARD_CONTENT, B.CREATE_DATE, B.SECRET, B.MUSIC_NO,
-		B.STATUS
-		FROM BOARD B
-		JOIN MEMBER M USING(USER_NO)
-		ORDER BY
-		TO_NUMBER(B.BOARD_NO) DESC
->>>>>>> dc870cf777995258c274481fc3a04d25263a4512
 	</select>
 	
 	<!-- 게시글의 총 개수를 반환하는 쿼리 (검색 유형 및 검색어 기반) -->
@@ -182,30 +170,27 @@
 
 
 
-	<update id="adminDeleteContent" parameterType="board">
+	<update id="adminDeleteContent"  parameterType="board">
 		UPDATE BOARD
-		SET
-		STATUS = 'N'
+		SET STATUS = 'N'
 		WHERE BOARD_NO = #{boardNo}
 	</update>
-
-
-	<update id="adminRestoreContent" parameterType="board">
+	
+	
+	<update id="adminRestoreContent"  parameterType="board">
 		UPDATE BOARD
-		SET
-		STATUS = 'Y'
+		SET STATUS = 'Y'
 		WHERE BOARD_NO = #{boardNo}
 	</update>
 
 	<!-- 글관리 -->
-
+	
 	<select id="selectMusicListCount" resultType="int">
 		SELECT COUNT(*)
 		FROM MUSIC
 	</select>
 
 	<select id="selectMusicList" resultType="music">
-<<<<<<< HEAD
 		SELECT MUSIC_NO,MUSIC_TITLE,MUSIC_ARTIST,ENROLL_DATE,GENRE,STATUS
 	    FROM MUSIC
 	    <where>
@@ -270,61 +255,53 @@
 	            </choose>
 	        </if>
 	    </where>
-=======
-		SELECT
-		MUSIC_NO,MUSIC_TITLE,MUSIC_ARTIST,ENROLL_DATE,GENRE,STATUS
-		FROM MUSIC
-		ORDER BY TO_NUMBER(MUSIC_NO) DESC
->>>>>>> dc870cf777995258c274481fc3a04d25263a4512
 	</select>
 
-	<update id="adminDeleteMusic" parameterType="music">
+	<update id="adminDeleteMusic"  parameterType="music">
 		UPDATE MUSIC
-		SET
-		STATUS = 'N'
+		SET STATUS = 'N'
 		WHERE MUSIC_NO = #{musicNo}
 	</update>
-
-
-	<update id="adminRestoreMusic" parameterType="music">
+	
+	
+	<update id="adminRestoreMusic"  parameterType="music">
 		UPDATE MUSIC
-		SET
-		STATUS = 'Y'
+		SET STATUS = 'Y'
 		WHERE MUSIC_NO = #{musicNo}
 	</update>
 
 	<!-- 여기는 멤버리스트 정렬 -->
 	<select id="selectMemberListBySort" resultMap="memberResultSet">
-		SELECT *
-		FROM MEMBER
-		<where>
-			<choose>
-				<when test="searchTerm != null and searchTerm != ''">
-					(USER_NO LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR
-					USER_NAME LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR
-					USER_ID LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR
+	    SELECT * 
+	    FROM MEMBER
+	    <where>
+	        <choose>
+	            <when test="searchTerm != null and searchTerm != ''">
+	               (USER_NO LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR 
+					USER_NAME LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR 
+					USER_ID LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR 
 					EMAIL LIKE CONCAT(CONCAT('%', #{searchTerm}), '%'))
 
-				</when>
-				<otherwise>
-					<!-- 이 경우에는 모든 회원을 가져옵니다. -->
-				</otherwise>
-			</choose>
-		</where>
-		<choose>
-			<when test="sortBy == 'userNo'">
-				ORDER BY TO_NUMBER(USER_NO) ASC
-			</when>
-			<when test="sortBy == 'userName'">
-				ORDER BY USER_NAME
-			</when>
-			<when test="sortBy == 'userId'">
-				ORDER BY USER_ID
-			</when>
-			<otherwise>
-				ORDER BY TO_NUMBER(USER_NO) DESC
-			</otherwise>
-		</choose>
+	            </when>
+	            <otherwise>
+	                <!-- 이 경우에는 모든 회원을 가져옵니다. -->
+	            </otherwise>
+	        </choose>
+	    </where>
+	    <choose>
+	        <when test="sortBy == 'userNo'">
+	            ORDER BY TO_NUMBER(USER_NO) ASC
+	        </when>
+	        <when test="sortBy == 'userName'">
+	            ORDER BY USER_NAME
+	        </when>
+	        <when test="sortBy == 'userId'">
+	            ORDER BY USER_ID
+	        </when>
+	        <otherwise>
+	            ORDER BY TO_NUMBER(USER_NO) DESC 
+	        </otherwise>
+	    </choose>
 	</select>
 
 	<!-- 문의 관리자 답변업데이트 -->
