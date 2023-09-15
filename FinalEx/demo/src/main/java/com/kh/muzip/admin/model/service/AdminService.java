@@ -21,21 +21,27 @@ public interface AdminService {
 
 	int selectContentListCount();
 
-	ArrayList<Board> selectContentList(PageInfo pi);
-
+	ArrayList<Board> selectContentList(PageInfo pi,String searchTerm,String searchType,String sortBy);
+	int selectContentListCountByType(String searchTerm, String searchType);
+	
 	int adminDeleteContent(Board board);
 
 	int adminRestoreContent(Board board);
 
 	int selectMusicListCount();
 
-	ArrayList<Music> selectMusicList(PageInfo pi);
+	ArrayList<Music> selectMusicList(PageInfo pi,String searchTerm,String searchType,String sortBy);
+	int selectMusicListCountByType(String searchTerm, String searchType);
 
 	int adminDeleteMusic(Music music);
 
 	int adminRestoreMusic(Music music);
 
 	ArrayList<Member> selectMemberList(PageInfo pi, String sortBy,String searchTerm);
+
+	
+
+	
 
 	
 
