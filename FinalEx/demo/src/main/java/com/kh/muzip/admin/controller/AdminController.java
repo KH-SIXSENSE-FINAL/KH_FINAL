@@ -140,7 +140,7 @@ public class AdminController {
 
 	    // 정렬과 검색 조건을 포함하여 게시글 목록을 가져옴
 	    ArrayList<Board> list = adminService.selectContentList(pi, searchTerm, searchType, sortBy);
-
+	    
 	    
 	    return ResponseEntity.ok().body(list);
 	}
@@ -210,7 +210,7 @@ public class AdminController {
 		// 정렬과 검색 조건을 포함하여 게시글 목록을 가져옴
 		ArrayList<Music> list = adminService.selectMusicList(pi, searchTerm, searchType, sortBy);
 
-
+		System.out.println(list);
 		return ResponseEntity.ok().body(list);
 	}
 	

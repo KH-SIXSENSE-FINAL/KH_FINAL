@@ -60,7 +60,7 @@
 		<result column="MEMBERSHIP_NO" property="membershipNo" />
 	</resultMap>
 
-
+<!-- 회원관리 -->
 	<select id="selectMemberListCount" resultType="int">
 		SELECT COUNT(*)
 		FROM MEMBER
@@ -98,8 +98,41 @@
 		WHERE USER_NO = #{userNo}
 	</update>
 	
-	<!-- 회원관리 -->
+	<!-- 여기는 멤버리스트 정렬 -->
+	<select id="selectMemberListBySort" resultMap="memberResultSet">
+	    SELECT * 
+	    FROM MEMBER
+	    <where>
+	        <choose>
+	            <when test="searchTerm != null and searchTerm != ''">
+	               (USER_NO LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR 
+					USER_NAME LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR 
+					USER_ID LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR 
+					EMAIL LIKE CONCAT(CONCAT('%', #{searchTerm}), '%'))
 
+	            </when>
+	            <otherwise>
+	                <!-- 이 경우에는 모든 회원을 가져옵니다. -->
+	            </otherwise>
+	        </choose>
+	    </where>
+	    <choose>
+	        <when test="sortBy == 'userNo'">
+	            ORDER BY TO_NUMBER(USER_NO) ASC
+	        </when>
+	        <when test="sortBy == 'userName'">
+	            ORDER BY USER_NAME
+	        </when>
+	        <when test="sortBy == 'userId'">
+	            ORDER BY USER_ID
+	        </when>
+	        <otherwise>
+	            ORDER BY TO_NUMBER(USER_NO) DESC 
+	        </otherwise>
+	    </choose>
+	</select>
+	
+	<!-- 회원 끝 게시글 시작 -->
 	<select id="selectContentListCount" resultType="int">
 		SELECT COUNT(*)
 		FROM BOARD
@@ -183,7 +216,7 @@
 		WHERE BOARD_NO = #{boardNo}
 	</update>
 
-	<!-- 글관리 -->
+	<!-- 글관리 끝 뮤직 시작-->
 	
 	<select id="selectMusicListCount" resultType="int">
 		SELECT COUNT(*)
@@ -191,7 +224,7 @@
 	</select>
 
 	<select id="selectMusicList" resultType="music">
-		SELECT MUSIC_NO,MUSIC_TITLE,MUSIC_ARTIST,ENROLL_DATE,GENRE,STATUS
+		SELECT *
 	    FROM MUSIC
 	    <where>
 	        <if test="searchTerm != null and searchType != null">
@@ -270,39 +303,7 @@
 		WHERE MUSIC_NO = #{musicNo}
 	</update>
 
-	<!-- 여기는 멤버리스트 정렬 -->
-	<select id="selectMemberListBySort" resultMap="memberResultSet">
-	    SELECT * 
-	    FROM MEMBER
-	    <where>
-	        <choose>
-	            <when test="searchTerm != null and searchTerm != ''">
-	               (USER_NO LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR 
-					USER_NAME LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR 
-					USER_ID LIKE CONCAT(CONCAT('%', #{searchTerm}), '%') OR 
-					EMAIL LIKE CONCAT(CONCAT('%', #{searchTerm}), '%'))
-
-	            </when>
-	            <otherwise>
-	                <!-- 이 경우에는 모든 회원을 가져옵니다. -->
-	            </otherwise>
-	        </choose>
-	    </where>
-	    <choose>
-	        <when test="sortBy == 'userNo'">
-	            ORDER BY TO_NUMBER(USER_NO) ASC
-	        </when>
-	        <when test="sortBy == 'userName'">
-	            ORDER BY USER_NAME
-	        </when>
-	        <when test="sortBy == 'userId'">
-	            ORDER BY USER_ID
-	        </when>
-	        <otherwise>
-	            ORDER BY TO_NUMBER(USER_NO) DESC 
-	        </otherwise>
-	    </choose>
-	</select>
+	<!-- 뮤직 끝 -->
 
 	<!-- 문의 관리자 답변업데이트 -->
 	<update id="updateAdminReply" parameterType="map">
