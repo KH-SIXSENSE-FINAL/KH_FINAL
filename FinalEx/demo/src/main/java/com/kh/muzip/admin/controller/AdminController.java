@@ -20,7 +20,10 @@ import com.kh.muzip.admin.model.vo.PageInfo;
 import com.kh.muzip.member.model.vo.Member;
 import com.kh.muzip.music.model.vo.Music;
 import com.kh.muzip.setting.controller.SettingController;
+import com.kh.muzip.setting.model.service.SettingService;
+import com.kh.muzip.setting.model.vo.Contact;
 import com.kh.muzip.setting.model.vo.Genre;
+import com.kh.muzip.setting.model.vo.PaymentHistory;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -222,6 +225,163 @@ public class AdminController {
 			return ResponseEntity.badRequest().body(Map.of("message", "정보 수정에 실패했습니다."));
 		}
 		
+	}
+	
+	
+	//=========================================================================================
+	
+	@Autowired
+	private SettingService settingService;
+	
+	/* 문의목록갯수 */
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/selectContactListCount")
+	public ResponseEntity<?> selectContactListCount(@RequestBody HashMap<String, Object> m){
+		String userNo = null;
+		String category = (String)m.get("category");
+		String researchinput = (String)m.get("researchinput");
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("userNo", userNo);
+		map.put("category", category);
+		map.put("researchinput", researchinput);
+		
+		int listCount = settingService.selectContactListCount(map);
+
+		return ResponseEntity.ok().body(listCount);
+		
+		
+	}
+	
+	
+	/* 문의목록 */
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/selectContactList")
+	public ResponseEntity<?> selectContactList(@RequestBody HashMap<String, Object> m){
+		String userNo = null;
+		String category = (String)m.get("category");
+		String researchinput = (String)m.get("researchinput");
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("userNo", userNo);
+		map.put("category", category);
+		map.put("researchinput", researchinput);
+		
+		int listCount = settingService.selectContactListCount(map);
+		int currentPage = m.get("currentPage") != null ? (int) m.get("currentPage") : 1;
+		int pageLimit = 10; // 페이지 하단에 보여질 페이징바의 페이지 최대 갯수
+		int boardLimit = 10; // 한 페이지에 보여질 게시글의 최대 갯수
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		map.put("pi", pi);
+		ArrayList<Contact> list = settingService.selectContactList(map);
+		
+		return ResponseEntity.ok().body(list);
+	}
+	
+	/* 문의답변업데이트 */
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/updateAdminReply")
+	public ResponseEntity<?> updateAdminReply(@RequestBody HashMap<String, Object> m) {
+		
+		String contactNo = (String)m.get("contactNo");
+		String adminReply = (String)m.get("adminReply");
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("contactNo", contactNo);
+		map.put("adminReply", adminReply);
+		
+		int result = adminService.updateAdminReply(map);
+
+		if (result > 0) {
+			return ResponseEntity.ok().body(Map.of("message", "정보가 수정되었습니다."));
+		} else {
+			return ResponseEntity.badRequest().body(Map.of("message", "정보 수정에 실패했습니다."));
+		}
+
+	}
+
+	/* 문의삭제 */
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/DeleteContact")
+	public ResponseEntity<?> DeleteContact(@RequestBody HashMap<String, Object> m) {
+
+		String contactNo = (String)m.get("contactNo");
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("contactNo", contactNo);
+		
+		int result = adminService.DeleteContact(map);
+
+		if (result > 0) {
+			return ResponseEntity.ok().body(Map.of("message", "정보가 수정되었습니다."));
+		} else {
+			return ResponseEntity.badRequest().body(Map.of("message", "정보 수정에 실패했습니다."));
+		}
+
+	}
+	
+	/* 문의복구 */
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/RestoreContact")
+	public ResponseEntity<?> RestoreContact(@RequestBody HashMap<String, Object> m) {
+		
+		String contactNo = (String)m.get("contactNo");
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("contactNo", contactNo);
+		
+		int result = adminService.RestoreContact(map);
+		
+		if (result > 0) {
+			return ResponseEntity.ok().body(Map.of("message", "정보가 수정되었습니다."));
+		} else {
+			return ResponseEntity.badRequest().body(Map.of("message", "정보 수정에 실패했습니다."));
+		}
+		
+	}
+	
+	
+	/* 결제목록갯수 */
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/selectPaymentListCount")
+	public ResponseEntity<?> selectPaymentListCount(@RequestBody HashMap<String, Object> m){
+		String category = (String)m.get("category");
+		String researchinput = (String)m.get("researchinput");
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("category", category);
+		map.put("researchinput", researchinput);
+		
+		int listCount = adminService.selectPaymentListCount(map);
+
+		return ResponseEntity.ok().body(listCount);
+		
+		
+	}
+	
+	
+	/* 결제목록 */
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/selectPaymentList")
+	public ResponseEntity<?> selectPaymentList(@RequestBody HashMap<String, Object> m){
+		String category = (String)m.get("category");
+		String researchinput = (String)m.get("researchinput");
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("category", category);
+		map.put("researchinput", researchinput);
+		
+		int listCount = adminService.selectPaymentListCount(map);
+		int currentPage = m.get("currentPage") != null ? (int) m.get("currentPage") : 1;
+		int pageLimit = 10; // 페이지 하단에 보여질 페이징바의 페이지 최대 갯수
+		int boardLimit = 10; // 한 페이지에 보여질 게시글의 최대 갯수
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		map.put("pi", pi);
+		ArrayList<PaymentHistory> list = adminService.selectPaymentList(map);
+		
+		return ResponseEntity.ok().body(list);
 	}
 	
 	
