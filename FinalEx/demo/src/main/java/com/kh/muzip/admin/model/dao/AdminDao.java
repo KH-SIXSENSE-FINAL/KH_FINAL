@@ -2,7 +2,7 @@ package com.kh.muzip.admin.model.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -13,7 +13,11 @@ import com.kh.muzip.admin.model.vo.PageInfo;
 import com.kh.muzip.board.model.vo.Board;
 import com.kh.muzip.member.model.vo.Member;
 import com.kh.muzip.music.model.vo.Music;
+
+
+import com.kh.muzip.setting.model.vo.Contact;
 import com.kh.muzip.setting.model.vo.Genre;
+import com.kh.muzip.setting.model.vo.PaymentHistory;
 
 @Repository
 public class AdminDao {
@@ -74,16 +78,27 @@ public class AdminDao {
 
 
 
-	public ArrayList<Board> selectContentList(PageInfo pi) {
-		int limit = pi.getBoardLimit();
-		int offset = (pi.getCurrentPage() -1) * 10;
-		
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		
-		return (ArrayList)session.selectList("admin.selectContentList", null, rowBounds);
+	public ArrayList<Board> selectContentList(PageInfo pi, String searchTerm, String searchType, String sortBy) {
+	    int limit = pi.getBoardLimit();
+	    int offset = (pi.getCurrentPage() - 1) * 10;
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("searchTerm", searchTerm);
+	    params.put("searchType", searchType);
+	    params.put("sortBy", sortBy);
+	    
+	    RowBounds rowBounds = new RowBounds(offset, limit);
+	    
+	    return (ArrayList)session.selectList("admin.selectContentList", params, rowBounds);
 	}
 
 
+	public int selectContentListCountByType(String searchTerm, String searchType) {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("searchTerm", searchTerm);
+	    params.put("searchType", searchType);
+
+	    return session.selectOne("admin.selectContentListCountByType", params);
+	}
 
 
 
@@ -111,16 +126,26 @@ public class AdminDao {
 
 
 
-	public ArrayList<Music> selectMusicList(PageInfo pi) {
+	public ArrayList<Music> selectMusicList(PageInfo pi,String searchTerm,String searchType,String sortBy) {
 		int limit = pi.getBoardLimit();
-		int offset = (pi.getCurrentPage() -1) * 10;
-		
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		
-		return (ArrayList)session.selectList("admin.selectMusicList", null, rowBounds);
+	    int offset = (pi.getCurrentPage() - 1) * 10;
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("searchTerm", searchTerm);
+	    params.put("searchType", searchType);
+	    params.put("sortBy", sortBy);
+	    
+	    RowBounds rowBounds = new RowBounds(offset, limit);
+	    
+	    return (ArrayList)session.selectList("admin.selectMusicList", params, rowBounds);
 	}
 
+	public int selectMusicListCountByType(String searchTerm, String searchType) {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("searchTerm", searchTerm);
+	    params.put("searchType", searchType);
 
+	    return session.selectOne("admin.selectMusicListCountByType", params);
+	}
 
 
 
@@ -140,13 +165,14 @@ public class AdminDao {
 
 
 
-	public ArrayList<Member> selectMemberList(PageInfo pi, String sortBy) {
+	public ArrayList<Member> selectMemberList(PageInfo pi, String sortBy, String searchTerm) {
 	    int limit = pi.getBoardLimit();
 	    int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 
 	    HashMap<String, Object> map = new HashMap<>();
 	    map.put("sortBy", sortBy);
-	    
+	    map.put("searchTerm", searchTerm); // searchTerm 추가
+
 	    RowBounds rowBounds = new RowBounds(offset, limit);
 
 	    return (ArrayList) session.selectList("admin.selectMemberListBySort", map, rowBounds);
@@ -156,14 +182,64 @@ public class AdminDao {
 
 
 
-	public ArrayList<Member> selectMemberListBySearchQuery(String searchQuery, String sortBy) {
-	    
-	    HashMap<String, Object> map = new HashMap<>();
-	    map.put("searchQuery", searchQuery);
-	    map.put("sortBy", sortBy);
-	    
-	    return (ArrayList) session.selectList("admin.selectMemberListBySearchQuery", map);
+
+	
+
+	public int updateAdminReply(HashMap<String, Object> map) {
+		return session.update("admin.updateAdminReply",map);
 	}
+
+
+
+
+
+
+
+	
+
+	public int DeleteContact(HashMap<String, Object> map) {
+		return session.update("admin.DeleteContact",map);
+	}
+
+
+
+
+
+
+
+
+	public int RestoreContact(HashMap<String, Object> map) {
+		return session.update("admin.RestoreContact",map);
+	}
+
+
+
+
+
+	public int selectPaymentListCount(HashMap<String, Object> map) {
+		return session.selectOne("admin.selectPaymentListCount",map);
+	}
+
+
+
+
+
+	public ArrayList<PaymentHistory> selectPaymentList(HashMap<String, Object> map) {
+		int limit = ((PageInfo)map.get("pi")).getBoardLimit();
+		int offset = (((PageInfo)map.get("pi")).getCurrentPage() -1) * 10;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)session.selectList("admin.selectPaymentList", map, rowBounds);
+	}
+
+
+
+
+
+
+
+	
 
 
 

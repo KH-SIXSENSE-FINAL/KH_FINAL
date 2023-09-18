@@ -45,7 +45,7 @@
 </select>
 
 <select id = "chatRoomMember" parameterType="int" resultMap="memberResultSet">
-	SELECT USER_NAME,USER_ID
+	SELECT USER_NAME,USER_ID,USER_NO
 	FROM MEMBER
 	WHERE USER_ID IN (SELECT USER_NO FROM CHAT_JOIN WHERE CHATROOM_NO = #{chatroomNo})
 </select>

@@ -22,10 +22,11 @@
 		<result column="COMMENT_ALARM" property="commentAlarm" />
 		<result column="MUSIC_NO" property="musicNo" />
 	</resultMap>
-	
+
 	<resultMap id="contactResultSet" type="contact">
 		<id column="CONTACT_NO" property="contactNo" />
 		<result column="USER_NO" property="userNo" />
+		<result column="USER_ID" property="userId" />
 		<result column="CONTACT_TITLE" property="contactTitle" />
 		<result column="CONTACT_CONT" property="contactCont" />
 		<result column="CONTACT_DATE" property="contactDate" />
@@ -78,117 +79,149 @@
 		FROM SETTING
 		WHERE USER_NO = #{userNo}
 	</select>
-	
+
 	<!-- 알람설정변경 -->
 	<update id="setautoPlay" parameterType="map">
 		UPDATE SETTING
-		SET AUTO_PLAY = #{result}
+		SET
+		AUTO_PLAY = #{result}
 		WHERE USER_NO = #{userNo}
 	</update>
 	<update id="settheme" parameterType="map">
 		UPDATE SETTING
-		SET THEME = #{result}
+		SET THEME =
+		#{result}
 		WHERE USER_NO = #{userNo}
 	</update>
 	<update id="setchatAlarm" parameterType="map">
 		UPDATE SETTING
-		SET CHAT_ALARM = #{result}
+		SET
+		CHAT_ALARM = #{result}
 		WHERE USER_NO = #{userNo}
 	</update>
 	<update id="setmusicAlarm" parameterType="map">
 		UPDATE SETTING
-		SET MUSIC_ALARM = #{result}
+		SET
+		MUSIC_ALARM = #{result}
 		WHERE USER_NO = #{userNo}
 	</update>
 	<update id="setcommentAlarm" parameterType="map">
 		UPDATE SETTING
-		SET COMMENT_ALARM = #{result}
+		SET
+		COMMENT_ALARM = #{result}
 		WHERE USER_NO = #{userNo}
 	</update>
-	
+
 	<!-- 회원탈퇴 -->
 	<update id="withdrawal" parameterType="int">
 		UPDATE MEMBER
-		SET STATUS = 'N'
+		SET STATUS =
+		'N'
 		WHERE USER_NO = #{userNo}
 	</update>
-	
+
 	<insert id="insertsetting" parameterType="int">
-		INSERT INTO SETTING(USER_NO,AUTO_PLAY,THEME,CHAT_ALARM,MUSIC_ALARM,COMMENT_ALARM)
+		INSERT INTO
+		SETTING(USER_NO,AUTO_PLAY,THEME,CHAT_ALARM,MUSIC_ALARM,COMMENT_ALARM)
 		VALUES(#{userNo}, 'Y', 'Y', 'Y', 'Y', 'Y')
 	</insert>
-	
+
 	<insert id="updateMembership" parameterType="paymentHistory">
-		INSERT INTO PAYMENT_HISTORY VALUES(
-			SEQ_PAYMENT_NO.NEXTVAL,
-			SYSDATE,
-			#{userNo},
-			#{membershipNo}
-		)	
-	
+		INSERT INTO
+		PAYMENT_HISTORY VALUES(
+		SEQ_PAYMENT_NO.NEXTVAL,
+		SYSDATE,
+		#{userNo},
+		#{membershipNo}
+		)
+
 	</insert>
 
 	<update id="membershipUpdate" parameterType="paymentHistory">
 		UPDATE MEMBER
-		SET MEMBERSHIP_NO = #{membershipNo}
+		SET
+		MEMBERSHIP_NO = #{membershipNo}
 		WHERE USER_NO = #{userNo}
 	</update>
-	
-	
-	<select id="selectContactListCount" parameterType="map" resultType="int">
-		SELECT COUNT(*)
-		FROM CONTACT
-		WHERE STATUS = 'Y'
-		<if test="researchinput != null and researchinput !=''">
-			<choose>
-				<when test="category == 'title'">
-					AND CONTACT_TITLE LIKE '%' || #{researchinput} || '%'
-				</when>
-				<when test="category == 'content'">
-					AND CONTACT_CONT LIKE '%' || #{researchinput} || '%'
-				</when>
-			</choose>
-			</if>
-	</select>
-	
 
-	<select id="selectContactList" parameterType="map" resultType="contact">
-		SELECT *
-		FROM CONTACT
-		WHERE STATUS = 'Y'
+
+	<select id="selectContactListCount" parameterType="map"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM CONTACT C
+		JOIN MEMBER M ON C.USER_NO = M.USER_NO
+
 		<if test="researchinput != null and researchinput !=''">
 			<choose>
 				<when test="category == 'title'">
-					AND CONTACT_TITLE LIKE '%' || #{researchinput} || '%'
+					WHERE C.CONTACT_TITLE LIKE '%' || #{researchinput}
+					|| '%'
 				</when>
 				<when test="category == 'content'">
-					AND CONTACT_CONT LIKE '%' || #{researchinput} || '%'
+					WHERE C.CONTACT_CONT LIKE '%' || #{researchinput} ||
+					'%'
+				</when>
+				<when test="category == 'userId'">
+					WHERE M.USER_ID LIKE '%' || #{researchinput} || '%'
 				</when>
 			</choose>
-			</if>
+		</if>
+		<if test="userNo != null">
+			AND C.STATUS = 'Y'
+			AND C.USER_NO = TO_NUMBER(#{userNo})
+		</if>
+	</select>
+
+
+	<select id="selectContactList" parameterType="map"
+		resultType="contact">
+		SELECT C.CONTACT_NO, M.USER_ID, C.USER_NO, C.CONTACT_TITLE,
+		C.CONTACT_CONT, C.CONTACT_DATE, C.ADMIN_REPLY, C.STATUS
+		FROM CONTACT C
+		JOIN MEMBER M ON C.USER_NO = M.USER_NO
+
+		<if test="researchinput != null and researchinput !=''">
+			<choose>
+				<when test="category == 'title'">
+					WHERE C.CONTACT_TITLE LIKE '%' || #{researchinput}
+					||'%'
+				</when>
+				<when test="category == 'content'">
+					WHERE C.CONTACT_CONT LIKE '%' || #{researchinput} ||
+					'%'
+				</when>
+				<when test="category == 'userId'">
+					WHERE M.USER_ID LIKE '%' || #{researchinput} || '%'
+				</when>
+			</choose>
+		</if>
+		<if test="userNo != null">
+			AND C.STATUS = 'Y'
+			AND C.USER_NO = TO_NUMBER(#{userNo})
+		</if>
 		ORDER BY TO_NUMBER(CONTACT_NO) DESC
 	</select>
-	
+
 	<insert id="insertContact" parameterType="map">
 		INSERT INTO CONTACT
-			(
-				CONTACT_NO,
-				USER_NO,
-				CONTACT_TITLE,
-				CONTACT_CONT,
-				CONTACT_DATE,
-				ADMIN_REPLY,
-				STATUS
-			) VALUES (
-				SEQ_CONTACT_NO.NEXTVAL,
-				#{userNo},
-				#{contactTitle},
-				#{contactCont},
-				SYSDATE,
-				'',
-				'Y'
-			)
+		(
+		CONTACT_NO,
+		USER_NO,
+		CONTACT_TITLE,
+		CONTACT_CONT,
+		CONTACT_DATE,
+		ADMIN_REPLY,
+		STATUS
+		) VALUES (
+		SEQ_CONTACT_NO.NEXTVAL,
+		#{userNo},
+		#{contactTitle},
+		#{contactCont},
+		SYSDATE,
+		'',
+		'Y'
+		)
 	</insert>
-	
+
 
 </mapper>
