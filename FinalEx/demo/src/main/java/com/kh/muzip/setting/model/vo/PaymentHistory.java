@@ -16,4 +16,5 @@ public class PaymentHistory {
 	private String userNo;
 	private String userId;
 	private int membershipNo;
+	private String membershipPrice;
 }
