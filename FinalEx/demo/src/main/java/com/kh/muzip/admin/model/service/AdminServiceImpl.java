@@ -54,8 +54,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public ArrayList<Board> selectContentList(PageInfo pi) {
-		return adminDao.selectContentList(pi);
+	public ArrayList<Board> selectContentList(PageInfo pi,String searchTerm,String searchType,String sortBy) {
+		return adminDao.selectContentList(pi,searchTerm,searchType,sortBy);
+	}
+	
+	@Override
+	public int selectContentListCountByType(String searchTerm, String searchType) {
+		return adminDao.selectContentListCountByType(searchTerm,searchType);
 	}
 
 	@Override
@@ -74,8 +79,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public ArrayList<Music> selectMusicList(PageInfo pi) {
-		return adminDao.selectMusicList(pi);
+	public ArrayList<Music> selectMusicList(PageInfo pi,String searchTerm,String searchType,String sortBy) {
+		return adminDao.selectMusicList(pi,searchTerm,searchType,sortBy);
+	}
+	
+	@Override
+	public int selectMusicListCountByType(String searchTerm, String searchType) {
+		return adminDao.selectMusicListCountByType(searchTerm,searchType);
 	}
 
 	@Override
@@ -117,6 +127,10 @@ public class AdminServiceImpl implements AdminService {
 	public ArrayList<PaymentHistory> selectPaymentList(HashMap<String, Object> map) {
 		return adminDao.selectPaymentList(map);
 	}
+
+	
+
+	
 
 	
 

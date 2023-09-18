@@ -109,7 +109,7 @@ public class AdminController {
 	}
 	
 	
-	//-----------------------------회원관리--------------------------------------
+	//-----------------------------회원관리 끝 게시글 관리 시작--------------------------------------
 	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/selectContentListCount")
@@ -123,19 +123,28 @@ public class AdminController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/selectContentList")
 	public ResponseEntity<?> selectContentList(@RequestBody HashMap<String, Object> m) {
+	    // 검색어, 검색 유형, 정렬 기준 추출
+	    String searchTerm = m.get("searchTerm") != null ? (String) m.get("searchTerm") : "";
+	    String searchType = m.get("searchType") != null ? (String) m.get("searchType") : "boardNo";
 
+	    String sortBy = m.get("sortBy") != null ? (String) m.get("sortBy") : "default";
 
-		int listCount = adminService.selectContentListCount();
-		int currentPage = m.get("currentPage") != null ? (int) m.get("currentPage") : 1;
-		int pageLimit = 10; // 페이지 하단에 보여질 페이징바의 페이지 최대 갯수
-		int boardLimit = 10; // 한 페이지에 보여질 게시글의 최대 갯수
+	    // 총 게시글 수는 검색 조건에 따라 달라질 수 있으므로 검색 조건을 파라미터로 넘김
+	    int listCount = adminService.selectContentListCountByType(searchTerm, searchType);
 
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		ArrayList<Board> list = adminService.selectContentList(pi);
+	    int currentPage = m.get("currentPage") != null ? (int) m.get("currentPage") : 1;
+	    int pageLimit = 10;
+	    int boardLimit = 10;
 
+	    PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
 
-		return ResponseEntity.ok().body(list);
+	    // 정렬과 검색 조건을 포함하여 게시글 목록을 가져옴
+	    ArrayList<Board> list = adminService.selectContentList(pi, searchTerm, searchType, sortBy);
+	    
+	    
+	    return ResponseEntity.ok().body(list);
 	}
+
 	
 	
 	@CrossOrigin(origins = "http://localhost:3000")
@@ -168,7 +177,7 @@ public class AdminController {
 	}
 	
 	
-	//-------------------------------------글 관리-------------------------------------------------
+	//-------------------------------------글 관리끝 음악관리 시작-------------------------------------------------
 	
 	
 	@CrossOrigin(origins = "http://localhost:3000")
@@ -183,21 +192,29 @@ public class AdminController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/selectMusicList")
 	public ResponseEntity<?> selectMusicList(@RequestBody HashMap<String, Object> m) {
+		// 검색어, 검색 유형, 정렬 기준 추출
+	    String searchTerm = m.get("searchTerm") != null ? (String) m.get("searchTerm") : "";
+	    String searchType = m.get("searchType") != null ? (String) m.get("searchType") : "musicNo";
 
+	    String sortBy = m.get("sortBy") != null ? (String) m.get("sortBy") : "default";
 
-		int listCount = adminService.selectMusicListCount();
+	    // 총 게시글 수는 검색 조건에 따라 달라질 수 있으므로 검색 조건을 파라미터로 넘김
+	    int listCount = adminService.selectMusicListCountByType(searchTerm, searchType);
+	    
 		int currentPage = m.get("currentPage") != null ? (int) m.get("currentPage") : 1;
 		int pageLimit = 10; // 페이지 하단에 보여질 페이징바의 페이지 최대 갯수
 		int boardLimit = 10; // 한 페이지에 보여질 게시글의 최대 갯수
 
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		ArrayList<Music> list = adminService.selectMusicList(pi);
+		
+		// 정렬과 검색 조건을 포함하여 게시글 목록을 가져옴
+		ArrayList<Music> list = adminService.selectMusicList(pi, searchTerm, searchType, sortBy);
 
-
+		System.out.println(list);
 		return ResponseEntity.ok().body(list);
 	}
 	
-	
+
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/adminDeleteMusic")
 	public ResponseEntity<?> adminDeleteMusic(@RequestBody Music music) {
