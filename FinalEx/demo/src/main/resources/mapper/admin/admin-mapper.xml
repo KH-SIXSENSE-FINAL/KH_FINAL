@@ -58,6 +58,7 @@
 		<result column="USER_NO" property="userNo" />
 		<result column="USER_ID" property="userId" />
 		<result column="MEMBERSHIP_NO" property="membershipNo" />
+		<result column="MEMBERSHIP_PRICE" property="membershipPrice" />
 	</resultMap>
 
 <!-- 회원관리 -->
@@ -226,6 +227,7 @@
 	<select id="selectMusicList" resultType="music">
 		SELECT *
 	    FROM MUSIC
+	    JOIN MUSIC_FILE USING(MUSIC_NO)
 	    <where>
 	        <if test="searchTerm != null and searchType != null">
 	            <choose>
@@ -351,10 +353,10 @@
 	<!-- 결제목록리스트 -->
 	<select id="selectPaymentList" parameterType="map"
 		resultMap="paymentResultSet">
-		SELECT P.PAYMENT_NO, M.USER_ID, P.USER_NO, P.PAYMENT_DATE, P.MEMBERSHIP_NO
-		FROM
-		PAYMENT_HISTORY P
+		SELECT P.PAYMENT_NO, M.USER_ID, P.USER_NO, P.PAYMENT_DATE, P.MEMBERSHIP_NO, MS.MEMBERSHIP_PRICE 
+		FROM PAYMENT_HISTORY P
 		JOIN MEMBER M ON P.USER_NO = M.USER_NO
+		JOIN MEMBERSHIP MS ON P.MEMBERSHIP_NO = MS.MEMBERSHIP_NO
 
 		<if test="researchinput != null and researchinput !=''">
 			<choose>

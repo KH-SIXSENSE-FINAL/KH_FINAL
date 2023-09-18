@@ -16,13 +16,8 @@ public class AlarmServiceImpl implements AlarmService{
 	private AlarmDao alarmDao;
 	
 	@Override
-	public List<Integer> getChatRoomNo(String userNo){
-		return alarmDao.getChatRoomNo(userNo);
-	}
-
-	@Override
-	public List<Alarm> getAlarms(String userNo, List<Integer> chatRoomNo) {
-		return alarmDao.getAlarms(userNo, chatRoomNo);
+	public List<Alarm> getAlarms(String userNo) {
+		return alarmDao.getAlarms(userNo);
 	}
 	
 	@Override
@@ -46,8 +41,13 @@ public class AlarmServiceImpl implements AlarmService{
 	}
 
 	@Override
-	public void checkAlarm(String alarmNo) {
-		alarmDao.checkAlarm(alarmNo);
+	public int checkAlarm(String alarmNo) {
+		return alarmDao.checkAlarm(alarmNo);
+	}
+	
+	@Override
+	public int removeChatRoomAlarm(String chatroomNo, String userNo) {
+		return alarmDao.removeChatRoomAlarm(chatroomNo, userNo);
 	}
 	
 	@Override

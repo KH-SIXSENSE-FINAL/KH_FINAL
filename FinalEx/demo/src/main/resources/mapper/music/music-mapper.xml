@@ -26,6 +26,17 @@
 					select="selectPlaylistSongs" column="PLAYLIST_NO"/>
 	</resultMap>
 	
+	<resultMap id="musicFileResultSet" type="musicFile">
+		<id column="MUSIC_NO" property="musicNo"/>
+		<result column="MUSIC_ORIGIN_NAME" property="musicOriginName"/>
+		<result column="MUSIC_CHANGE_NAME" property="musicChangeName"/>
+		<result column="MUSIC_PATH" property="musicPath"/>
+		<result column="COVER_ORIGIN_NAME" property="coverOriginName"/>
+		<result column="COVER_CHANGE_NAME" property="coverChangeName"/>
+		<result column="COVER_PATH" property="coverPath"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
+	
 
 	<select id="selectPlaylist" parameterType="int" resultMap="playlistResultSet">
 		SELECT *
@@ -193,7 +204,7 @@
 		JOIN MUSIC_FILE MF USING(MUSIC_NO)
 		WHERE M.STATUS = 'Y' AND MUSIC_NO = #{musicNo}
 	</select>
-	<select id="selectOneMusicFile" parameterType="string">
+	<select id="selectOneMusicFile" parameterType="string" resultMap="musicFileResultSet">
 		SELECT *
 		FROM MUSIC_FILE
 		WHERE MUSIC_NO = #{musicNo} AND STATUS='Y'
