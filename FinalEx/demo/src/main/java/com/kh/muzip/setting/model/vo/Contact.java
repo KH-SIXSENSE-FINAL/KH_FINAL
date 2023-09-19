@@ -11,6 +11,7 @@ import java.sql.Date;
 public class Contact {
 	private int contactNo;
 	private int userNo;
+	private String userId;
 	private String contactTitle;
 	private String contactCont;
 	private Date contactDate;

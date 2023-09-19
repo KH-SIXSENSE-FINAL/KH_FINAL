@@ -153,8 +153,8 @@ public class MusicController {
 	@PostMapping(value ="/updateMusic", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public int updateMusic(
 			@RequestParam("musicNo") String musicNo,
-			@RequestParam("cover") MultipartFile cover,
-			@RequestParam("music") MultipartFile music,
+			@RequestParam(value = "cover", required = false) MultipartFile cover,
+			@RequestParam(value = "music",  required = false) MultipartFile music,
 			@RequestParam("title") String title, 
 			@RequestParam("artist") String artist,
 			@RequestParam("lyrics") String lyrics,
@@ -167,6 +167,8 @@ public class MusicController {
 		m.setMusicArtist(artist);
 		m.setMusicLyrics(lyrics);
 		m.setGenre(genre);
+		
+		log.info("뮤직 == {}", m);
 		
 		String imgaeWebPath="/resources/image/";
 		String mp3WebPath="/resources/mp3/";
@@ -181,13 +183,13 @@ public class MusicController {
 		
 		MusicFile musicFile = new MusicFile();
 		
-		if(!cover.isEmpty()) {
+		if(cover != null) {
 			// 파일명 재정의 + 저장
 			String changeName = Utils.saveFile(cover, imageServerFolderPath);
 			musicFile.setCoverChangeName(changeName);
 			musicFile.setCoverOriginName(cover.getOriginalFilename());
 		};
-		if(!music.isEmpty()) {
+		if(music != null) {
 			String changeName = Utils.saveFile(music, mp3ServerFolderPath);
 			musicFile.setMusicChangeName(changeName);
 			musicFile.setMusicOriginName(music.getOriginalFilename());
@@ -259,8 +261,11 @@ public class MusicController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/increaseCount")
 	public int increaseCount(
-			@RequestParam("musicNo") String musicNo
+			@RequestParam(value = "musicNo", required = false) String musicNo
 			){
+		if(musicNo == null) {
+			return 0;
+		}
 		return musicService.increaseCount(musicNo);
 	}
 	

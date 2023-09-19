@@ -83,13 +83,13 @@ public class SettingServiceImpl implements SettingService{
 	}
 	
 	@Override
-	public int selectContactListCount(String category, String researchinput) {
-		return settingDao.selectContactListCount(category,researchinput);
+	public int selectContactListCount(HashMap<String, Object> map) {
+		return settingDao.selectContactListCount(map);
 	}
 
 	@Override
-	public ArrayList<Contact> selectContactList(PageInfo pi, String category, String researchinput) {
-		return settingDao.selectContactList(pi,category,researchinput);
+	public ArrayList<Contact> selectContactList(HashMap<String, Object> map) {
+		return settingDao.selectContactList(map);
 	}
 
 	@Override

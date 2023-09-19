@@ -21,18 +21,25 @@ public class AlarmController {
 	@CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/getAlarms")
     public List<Alarm> getAlarms(@RequestParam("userNo") String userNo){
-    	
-		List<Integer> chatRoomNo = alarmService.getChatRoomNo(userNo);
-		
-		List<Alarm> list = alarmService.getAlarms(userNo, chatRoomNo);
+    			
+		List<Alarm> list = alarmService.getAlarms(userNo);
     	
     	return list;
     }
 	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/checkAlarm")
-	public void checkAlarm(@RequestParam("alarmNo") String alarmNo){
-		alarmService.checkAlarm(alarmNo);
+	public int checkAlarm(@RequestParam("alarmNo") String alarmNo){
+		return alarmService.checkAlarm(alarmNo);
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/removeChatRoomAlarm")
+	public int removeChatRoomAlarm(
+			@RequestParam("chatroomNo") String chatroomNo,
+			@RequestParam("userNo") String userNo
+			){
+		return alarmService.removeChatRoomAlarm(chatroomNo, userNo);
 	}
 
 }
