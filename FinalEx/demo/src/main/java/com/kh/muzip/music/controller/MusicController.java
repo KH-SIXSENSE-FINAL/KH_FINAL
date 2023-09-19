@@ -261,8 +261,11 @@ public class MusicController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/increaseCount")
 	public int increaseCount(
-			@RequestParam("musicNo") String musicNo
+			@RequestParam(value = "musicNo", required = false) String musicNo
 			){
+		if(musicNo == null) {
+			return 0;
+		}
 		return musicService.increaseCount(musicNo);
 	}
 	
