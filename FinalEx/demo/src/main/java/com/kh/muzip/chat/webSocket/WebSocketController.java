@@ -1,20 +1,14 @@
 package com.kh.muzip.chat.webSocket;
 
 import java.sql.Date;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.sql.Timestamp;
+import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.user.SimpUser;
-import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.kh.muzip.chat.service.AlarmService;
@@ -34,16 +28,18 @@ public class WebSocketController extends TextWebSocketHandler{
     @Autowired
     private AlarmService alarmService;
     
-	@MessageMapping("/chat") // 클라이언트에서 "/chat"로 메시지를 보내면 이 핸들러가 호출
-	@SendTo("/chat/chatget") // 이 핸들러가 반환하는 메시지는 "/chat/chatget" 주제로 브로드캐스트
-	public ChatMessage handleChatMessage(@Payload ChatMessage message) {
+    @MessageMapping("/chat")
+    @SendTo("/chat/chatget")
+    public ChatMessage handleChatMessage(@Payload ChatMessage message) {
         // 받은 메시지를 저장 로직
-		message.setCreateDate(new Date(System.currentTimeMillis()));
-		log.info("받아온 메세지는 어디로 갔을까?=={}",message);
-		int result = service.insertMsg(message);
-		
-		return message;
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+        message.setCreateDate(currentTimestamp);
+        log.info("받아온 메세지는 어디로 갔을까?=={}{}", message, message.getCreateDate());
+        int result = service.insertMsg(message);
+
+        return message;
     }
+
 	
 	@MessageMapping("/alarm")
 	@SendTo("/alarm/alarmget")
