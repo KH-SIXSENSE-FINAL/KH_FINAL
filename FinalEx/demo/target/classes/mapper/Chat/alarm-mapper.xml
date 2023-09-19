@@ -14,23 +14,6 @@
 	<result column="STATUS" property="status"/>
 </resultMap>
 
-<select id="getChatRoomNo" parameterType="string" resultType="string">
-	SELECT CHATROOM_NO
-	FROM CHAT_JOIN C
-	JOIN MEMBER M ON M.USER_ID = C.USER_NO
-	WHERE M.USER_NO = #{userNo}
-</select>
-
-<select id="getChatAlarms" parameterType="list" resultMap="alarmResultSet">
-	SELECT *
-	FROM ALARM
-	WHERE 
-	<foreach collection="list" item="chatRoomNo" separator=" OR ">				
-		ALARM_PATH = #{chatRoomNo} AND CHECK_STATUS = 'N' AND STATUS = 'Y'
-	</foreach>
-	ORDER BY CREATE_DATE DESC
-</select>
-
 <select id="getAlarms" parameterType="string" resultMap="alarmResultSet">
 	SELECT *
 	FROM ALARM
@@ -51,6 +34,7 @@
 	INSERT INTO ALARM
 	(
 		ALARM_NO,
+		RECEIVER_NO,
 		SENDER_NO,
 		ALARM_KIND,
 		ALARM_PATH,
@@ -60,6 +44,7 @@
 		STATUS
 	) VALUES (
 		#{alarmNo},
+		#{receiverNo},
 		#{senderNo},
 		#{alarmKind},
 		#{alarmPath},
@@ -128,6 +113,12 @@
 	UPDATE ALARM
 	SET CHECK_STATUS = 'Y'
 	WHERE ALARM_NO = #{alarmNo}
+</update>
+
+<update id="removeChatRoomAlarm" parameterType="map">
+	UPDATE ALARM
+	SET CHECK_STATUS = 'Y'
+	WHERE RECEIVER_NO = #{userNo} AND ALARM_PATH = #{chatroomNo}
 </update>
 
 <select id="getReplyReceiverNo" parameterType="string" resultType="string">

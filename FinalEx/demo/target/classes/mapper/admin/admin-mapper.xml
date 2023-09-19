@@ -227,6 +227,7 @@
 	<select id="selectMusicList" resultType="music">
 		SELECT *
 	    FROM MUSIC
+	    JOIN MUSIC_FILE USING(MUSIC_NO)
 	    <where>
 	        <if test="searchTerm != null and searchType != null">
 	            <choose>
