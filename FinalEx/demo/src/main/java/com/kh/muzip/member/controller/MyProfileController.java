@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://192.168.30.180:3000")
 public class MyProfileController {
 
     @Autowired

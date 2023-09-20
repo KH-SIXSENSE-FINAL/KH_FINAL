@@ -82,8 +82,24 @@
 </select>
 <select id ="searchChat" parameterType="string" resultMap="chatRoomResultSet">
 	SELECT *
-	FROM CHAT
-	WHERE CHATROOM_NAME LIKE '%'|| #{search}|| '%' AND STATUS ='Y' AND USER_NO = #{userId}
+	FROM CHAT c
+	LEFT JOIN (
+	SELECT
+	cm.CHATROOM_NO,
+	cm.MESSAGE,
+	cm.CREATE_DATE
+	FROM
+	CHAT_MSG cm
+	JOIN (
+	SELECT CHATROOM_NO, MAX(CREATE_DATE) AS MAX_DATE
+	FROM CHAT_MSG
+	GROUP BY CHATROOM_NO
+	) max_msg ON cm.CHATROOM_NO = max_msg.CHATROOM_NO AND cm.CREATE_DATE =
+	max_msg.MAX_DATE
+	) latest_msg ON c.CHATROOM_NO = latest_msg.CHATROOM_NO
+	WHERE c.CHATROOM_NO IN (SELECT CHATROOM_NO FROM CHAT_JOIN WHERE USER_NO =
+	#{userId} AND CHATROOM_NAME LIKE '%'|| #{search}|| '%')
+	ORDER BY latest_msg.CREATE_DATE DESC NULLS LAST
 </select>
 <select id="Chatlist" parameterType="String" resultMap="chatRoomResultSet">
 	SELECT *
