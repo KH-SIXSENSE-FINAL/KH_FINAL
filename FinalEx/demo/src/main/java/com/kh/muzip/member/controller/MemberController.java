@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
+@CrossOrigin(origins = "http://192.168.30.180:3000")
 public class MemberController {
 	
     @Autowired
@@ -97,17 +98,18 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
     
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/checkFollow")
     public ResponseEntity<Map<String, Boolean>> checkFollow(@RequestParam("userId") String userId, @RequestParam("memberId") String memberId) {
     	boolean isFriendValue = memberService.checkFollow(userId, memberId); // 친구 여부 확인 함수 호출
 
         Map<String, Boolean> response = new HashMap<>();
         response.put("isFriend", isFriendValue);
-        log.info("isFriend == {}",response);
 
         return ResponseEntity.ok(response);
     }
     
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/Follow")
     public ResponseEntity<?> addFollow(@RequestParam("userId") String userId, @RequestParam("memberId") String memberId) {
         int result = memberService.addFollow(userId, memberId);
@@ -118,6 +120,7 @@ public class MemberController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/unFollow")
     public ResponseEntity<?> unFollow(@RequestParam("userId") String userId, @RequestParam("memberId") String memberId) {
     	int success = memberService.unFollow(userId, memberId);
@@ -128,6 +131,7 @@ public class MemberController {
         }
     }
     
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/userInfo")
     public ResponseEntity<String> addFollow(@RequestParam("userNo") String userNo){
     	Member userData = myprofileService.getUserData(Integer.parseInt(userNo));

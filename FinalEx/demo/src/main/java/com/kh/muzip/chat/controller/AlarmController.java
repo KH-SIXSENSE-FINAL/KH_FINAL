@@ -13,6 +13,7 @@ import com.kh.muzip.chat.service.AlarmService;
 import com.kh.muzip.chat.vo.Alarm;
 
 @RestController
+@CrossOrigin(origins = "http://192.168.30.180:3000")
 public class AlarmController {
 	
 	@Autowired
