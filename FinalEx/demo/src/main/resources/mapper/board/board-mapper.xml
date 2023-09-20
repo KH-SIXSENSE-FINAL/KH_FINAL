@@ -113,7 +113,7 @@
 	    SELECT M.USER_NO AS key, NVL(A.CHANGE_NAME, 'noPorofile.jpg') AS value
         FROM MEMBER M
         LEFT JOIN ATTACHMENT A ON M.USER_NO = A.USER_NO AND A.FILE_LEVEL = 1
-        WHERE M.STATUS = 'Y'
+        WHERE M.STATUS = 'Y' AND A.STATUS = 'Y'
 	</select>
 	 
 	 <select id="selectReplyList" parameterType="int" resultMap="replyResultSet">
