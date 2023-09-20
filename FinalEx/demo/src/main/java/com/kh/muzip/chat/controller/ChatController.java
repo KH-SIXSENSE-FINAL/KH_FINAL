@@ -26,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 //@RequestMapping("/messages")
+@CrossOrigin(origins = "http://192.168.30.180:3000")
 public class ChatController {
 	    
     @Autowired
