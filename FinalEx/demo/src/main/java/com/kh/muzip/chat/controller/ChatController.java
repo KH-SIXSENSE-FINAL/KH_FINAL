@@ -43,7 +43,6 @@ public class ChatController {
     	room.setUserId(userId);
     	room.setChatroomName(memberId);
     	int chatRoomNo = service.createChatRoom(room,params);
-//    	log.info("채팅방 번호 == {}",chatRoomNo);
 		
 		if(chatRoomNo > 1) { 
 			join.setUserId(memberId);
@@ -94,7 +93,6 @@ public class ChatController {
     	String userId = (String) formData.get("userId");
         List<String> memberIdList = (List<String>) formData.get("memberId");
         String chatroomName = (String) formData.get("chatroomName");
-        log.info(userId,memberIdList,chatroomName);
     	
     	room.setUserId(userId);
     	room.setChatroomName(chatroomName);
@@ -132,7 +130,6 @@ public class ChatController {
     public ResponseEntity<String> joinGroupChat(@RequestBody Map<String, Object> formData,ChatRoomJoin join){
         List<String> memberIdList = (List<String>) formData.get("memberId");
     	int chatroomNo = (int)formData.get("chatroomNo");
-    	log.info("멤멤",chatroomNo,memberIdList);
     	
     	service.joinGroupMember(chatroomNo,memberIdList);
     	
@@ -142,7 +139,6 @@ public class ChatController {
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/followSearch")
     public ResponseEntity<List<Member>> searchMembers(@RequestParam("query") String query,@RequestParam("userId") String userId) {
-    	log.info(query,userId);
     	Map<String, Object> params = new HashMap<>();
 	    params.put("userId", userId); 
 	    params.put("query",query);

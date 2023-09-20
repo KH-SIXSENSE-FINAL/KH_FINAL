@@ -168,7 +168,6 @@ public class MusicController {
 		m.setMusicLyrics(lyrics);
 		m.setGenre(genre);
 		
-		log.info("뮤직 == {}", m);
 		
 		String imgaeWebPath="/resources/image/";
 		String mp3WebPath="/resources/mp3/";
@@ -272,12 +271,10 @@ public class MusicController {
 	@Scheduled(cron = "0 0 * * * ?") // 매시 정각
 	public void resetHourCount() {
 		musicService.resetHourCount();
-		log.info("1시간 조회수가 초기화 되었습니다.");
 	}
 	@Scheduled(cron = "0 0 0 * * ?") // 매일 자정
 	public void resetDailyCount() {
 		musicService.resetDailyCount();
-		log.info("1일 조회수가 초기화 되었습니다.");
 	}
 	
 	@CrossOrigin(origins = "http://localhost:3000")
