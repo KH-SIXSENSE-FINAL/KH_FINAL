@@ -105,7 +105,6 @@ public class MemberController {
 
         Map<String, Boolean> response = new HashMap<>();
         response.put("isFriend", isFriendValue);
-        log.info("isFriend == {}",response);
 
         return ResponseEntity.ok(response);
     }
