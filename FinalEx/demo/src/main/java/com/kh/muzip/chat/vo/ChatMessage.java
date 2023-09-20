@@ -2,6 +2,7 @@ package com.kh.muzip.chat.vo;
 
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,7 +33,7 @@ public class ChatMessage {
    @Column(name = "MESSAGE")
    private String message;
    @Column(name = "CREATE_DATE")
-   private Date createDate;
+   private Timestamp createDate;
 }
 
 
