@@ -147,7 +147,7 @@
 	 		   B.MUSIC_NO
 	 	FROM BOARD B
         JOIN MEMBER M ON M.USER_NO = B.USER_NO
-	 	WHERE B.STATUS = 'Y'
+	 	WHERE B.STATUS = 'Y' AND M.STATUS = 'Y'
         ORDER BY TO_NUMBER(BOARD_NO) DESC
 	 </select>
   
