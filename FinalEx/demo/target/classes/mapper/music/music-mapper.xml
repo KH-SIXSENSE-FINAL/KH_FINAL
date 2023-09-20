@@ -93,7 +93,7 @@
 		        JOIN MUSIC_FILE MF USING(MUSIC_NO)
 				WHERE M.STATUS='Y' AND ( 
 				<foreach collection="list" item="genre" separator=" OR ">				
-					GENRE=#{genre}
+					UPPER(REPLACE(GENRE, ' ', '')) LIKE UPPER('%' || REPLACE(#{genre}, ' ', '') || '%')
 				</foreach>
 				)
 				ORDER BY DAILY_COUNT DESC
