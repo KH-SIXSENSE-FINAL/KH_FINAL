@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.kh.muzip.chat.service.AlarmService;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
+@CrossOrigin(origins = "http://192.168.30.180:3000")
 public class WebSocketController extends TextWebSocketHandler{
     
     @Autowired
@@ -28,19 +30,19 @@ public class WebSocketController extends TextWebSocketHandler{
     @Autowired
     private AlarmService alarmService;
     
+    @CrossOrigin(origins = "http://localhost:3000")
     @MessageMapping("/chat")
     @SendTo("/chat/chatget")
     public ChatMessage handleChatMessage(@Payload ChatMessage message) {
         // 받은 메시지를 저장 로직
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         message.setCreateDate(currentTimestamp);
-        log.info("받아온 메세지는 어디로 갔을까?=={}{}", message, message.getCreateDate());
         int result = service.insertMsg(message);
 
         return message;
     }
 
-	
+    @CrossOrigin(origins = "http://localhost:3000")
 	@MessageMapping("/alarm")
 	@SendTo("/alarm/alarmget")
 	public Alarm handleAlarm(@Payload Alarm alarm) {

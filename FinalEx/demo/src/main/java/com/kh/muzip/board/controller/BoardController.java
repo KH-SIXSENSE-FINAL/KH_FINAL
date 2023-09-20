@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "http://192.168.30.180:3000")
 public class BoardController {
 	@Autowired
 	private BoardService boardService;
@@ -227,7 +228,7 @@ public class BoardController {
 	@PostMapping("/deleteReply")
 	public ResponseEntity<String> deleteReply(
 			@RequestBody Reply r) {
-		log.info("댓글번호{}",r);
+		
 		int result = boardService.deleteReply(r);
 		if(result > 0 ) {
 			return ResponseEntity.ok("댓글이 삭제되었습니다.");

@@ -17,8 +17,7 @@ import com.kh.muzip.member.model.service.FollowService;
 import com.kh.muzip.member.model.vo.Follow;
 
 @RestController
-
-
+@CrossOrigin(origins = "http://192.168.30.180:3000")
 public class FollowController {
 
     @Autowired
