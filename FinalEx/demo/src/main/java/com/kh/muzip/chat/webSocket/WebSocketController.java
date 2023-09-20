@@ -34,7 +34,6 @@ public class WebSocketController extends TextWebSocketHandler{
         // 받은 메시지를 저장 로직
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         message.setCreateDate(currentTimestamp);
-        log.info("받아온 메세지는 어디로 갔을까?=={}{}", message, message.getCreateDate());
         int result = service.insertMsg(message);
 
         return message;

@@ -227,7 +227,7 @@ public class BoardController {
 	@PostMapping("/deleteReply")
 	public ResponseEntity<String> deleteReply(
 			@RequestBody Reply r) {
-		log.info("댓글번호{}",r);
+		
 		int result = boardService.deleteReply(r);
 		if(result > 0 ) {
 			return ResponseEntity.ok("댓글이 삭제되었습니다.");
